@@ -34,8 +34,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar – unchanged */}
-      <nav className="bg-white shadow-md py-4 px-6 md:px-12">
+      {/* Navbar – now STICKY */}
+      <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <button onClick={() => setMenuOpen(true)} className="p-2 rounded-md hover:bg-gray-100 focus:outline-none" aria-label="Menu">
@@ -202,9 +202,8 @@ function App() {
         </div>
       </section>
 
-            {/* ========== MEMBERSHIP SECTION – each card has its own image on top ========== */}
+      {/* ========== MEMBERSHIP SECTION – each card has its own image on top ========== */}
       <div className="max-w-6xl mx-auto mt-16 px-4">
-        {/* Heading and paragraph (same) */}
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>
           Membership
         </h2>
@@ -215,12 +214,11 @@ function App() {
           super-long-range aircraft.
         </p>
 
-        {/* Three cards – each with an image on top */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Program Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <img 
-              src="https://images.unsplash.com/photo-1540962351504-eca99c2b1a6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              src="timothy.jpg" 
               alt="Program" 
               className="w-full h-48 object-cover"
             />
@@ -256,7 +254,7 @@ function App() {
           {/* Corporate Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <img 
-              src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              src="WhatsApp.jpeg" 
               alt="Corporate" 
               className="w-full h-48 object-cover"
             />
