@@ -202,19 +202,77 @@ function App() {
         </div>
       </section>
 
-      {/* ========== NEW MEMBERSHIP SECTION ========== */}
-      <div className="max-w-5xl mx-auto mt-16 px-4">
+            {/* ========== MEMBERSHIP SECTION – each card has its own image on top ========== */}
+      <div className="max-w-6xl mx-auto mt-16 px-4">
+        {/* Heading and paragraph (same) */}
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>
           Membership
         </h2>
-        <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>
           Sivita offers flexible, investment-free solutions to suit your flying requirements.
           All Members enjoy global access and unparalleled service on board a 
           consistent and branded fleet of super-midsize, long-range and 
           super-long-range aircraft.
         </p>
+
+        {/* Three cards – each with an image on top */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Program Card */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1540962351504-eca99c2b1a6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              alt="Program" 
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>Program</h3>
+              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
+                Our bespoke flight subscription membership, offering guaranteed access to the entire fleet.
+              </p>
+              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+                View Membership
+              </a>
+            </div>
+          </div>
+
+          {/* VJ25 Card */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <img 
+              src="unsplash.jpg" 
+              alt="VJ25" 
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>VJ25</h3>
+              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
+                The membership for high-quality, low-frequency travel, from 25 flight hours per year.
+              </p>
+              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+                View Membership
+              </a>
+            </div>
+          </div>
+
+          {/* Corporate Card */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              alt="Corporate" 
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>Corporate</h3>
+              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
+                A full suite of flexible business jet solutions for corporations and executives around the world.
+              </p>
+              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+                View Membership
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* ========================================= */}
+      {/* =================================================== */}
 
       {/* Small world text */}
       <div className="text-center mt-12 text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>
