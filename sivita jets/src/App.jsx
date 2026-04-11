@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar – now STICKY */}
+      {/* Navbar – sticky */}
       <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
@@ -185,7 +185,7 @@ function App() {
           </div>
         )}
 
-        {/* Row below the grid: For round trip, show passenger box + search button. For one‑way, only search button. */}
+        {/* Row below the grid */}
         <div className="mt-4">
           {isRoundTrip && (
             <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -271,6 +271,68 @@ function App() {
         </div>
       </div>
       {/* =================================================== */}
+
+      {/* ========== SECTION: A GLOBAL JET FLEET – CARD STYLE ========== */}
+      <div className="max-w-6xl mx-auto mt-20 px-4">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            {/* Left side: text content */}
+            <div className="flex-1 p-6 md:p-8">
+              <h2 className="text-4xl md:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>
+                A global jet fleet
+              </h2>
+              <p className="text-lg text-gray-700 mt-6 text-left" style={{ fontFamily: "Afacad, sans-serif" }}>
+                Renowned for its consistency, the distinctive silver and red fleet is equipped for all needs — whether you need
+                a fully enabled business suite or a restful home away from home space.
+              </p>
+              <a href="#" className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+                Explore the fleet
+              </a>
+            </div>
+            {/* Right side: image */}
+            <div className="flex-1 md:max-w-[40%]">
+              <img 
+                src="yaroslav.jpg" 
+                alt="Aircraft fleet" 
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* ========================================================== */}
+
+                  {/* ========== SECTION: THE GLOBAL 7500 – CARD WITH IMAGE LEFT, TEXT RIGHT ========== */}
+      <div className="max-w-6xl mx-auto mt-20 px-4">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            {/* Left side: image */}
+            <div className="md:w-2/5">
+              <img 
+                src="simon.jpg" 
+                alt="Global 7500" 
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+            {/* Right side: text content (right-aligned) */}
+            <div className="flex-1 p-6 md:p-8 text-right">
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>
+                The Global 7500
+              </h2>
+              <p className="text-lg text-gray-700 mt-6 max-w-3xl ml-auto" style={{ fontFamily: "Afacad, sans-serif" }}>
+                Sivita unlocks the world with the first Global 7500 fleet, the largest and longest-range business jet.
+                The Global 7500 offers four true living spaces, including a full-size kitchen and a permanent bedroom.
+              </p>
+              <a href="#" className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+                Explore the fleet
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* =========================================================================== */}
 
       {/* Small world text */}
       <div className="text-center mt-12 text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>
