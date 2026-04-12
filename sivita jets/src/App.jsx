@@ -334,6 +334,18 @@ function App() {
       </div>
       {/* =========================================================================== */}
 
+
+            {/* ========== BIG IMAGE SECTION ========== */}
+      <div className="w-full mt-20">
+        <img 
+          src="chris.jpg" 
+          alt="Descriptive text" 
+          className="w-full h-auto md:h-[500px] object-cover"
+        />
+      </div>
+      {/* ===================================== */}
+
+
       {/* Small world text */}
       <div className="text-center mt-12 text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>
         <p>Small world. Big adventures.</p>
