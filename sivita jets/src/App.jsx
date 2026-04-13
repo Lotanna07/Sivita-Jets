@@ -335,26 +335,71 @@ function App() {
       {/* =========================================================================== */}
 
 
-            {/* ========== BIG IMAGE SECTION ========== */}
-      <div className="w-full mt-20">
+                  {/* ========== OUR PROMISE – FULL-WIDTH IMAGE WITH OVERLAY ========== */}
+      <div className="relative w-full mt-20">
         <img 
           src="chris.jpg" 
-          alt="Descriptive text" 
+          alt="Our Promise" 
           className="w-full h-auto md:h-[500px] object-cover"
         />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            Our Promise
+          </h2>
+          <p className="text-white text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: "Afacad, sans-serif" }}>
+            Want to know more? Let us draft a plan for you. Tell us about your most frequent flights, where you are based,
+            nature of your flights, preferred aircraft, times of the year you fly often and our team of aviation experts will
+            happily give you a real life example of what flying with VistaJet will look like for you. Give us the chance to 
+            arrange a consultation and create a personal proposal that perfectly fits all your needs.
+          </p>
+          <button 
+            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            style={{ fontFamily: "Afacad, sans-serif" }}
+          >
+            Make An Enquiry
+          </button>
+        </div>
       </div>
-      {/* ===================================== */}
+      {/* ================================================================= */}
 
+            {/* Footer – exact alignment under Fleet and Contact Us, with numbers next to first two aircraft */}
+      <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <div className="max-w-4xl mx-auto px-4">
+          {/* Top row: four links spaced evenly */}
+          <div className="flex justify-center gap-8 mb-8">
+            <a href="#" className="hover:underline">Fleet</a>
+            <a href="#" className="hover:underline">Membership</a>
+            <a href="#" className="hover:underline">Experience</a>
+            <a href="#" className="hover:underline">Contact Us</a>
+          </div>
 
-      {/* Small world text */}
-      <div className="text-center mt-12 text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>
-        <p>Small world. Big adventures.</p>
-        <p className="text-xs mt-1">Current language: {language}</p>
-      </div>
+          {/* Two‑column content: left under Fleet, right under Contact Us */}
+          <div className="flex justify-center gap-50 mb-10">
+            {/* Left column: aircraft names (under Fleet) */}
+            <div className="text-center ">
+              <div>Gulfstream</div>
+              <div>Dassault</div>
+              <div>Cessna</div>
+              <div>Bombardier</div>
+              <div>Embraer</div>
+            </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white mt-16 py-8 text-center" style={{ fontFamily: "Afacad, sans-serif" }}>
-        <p>&copy; 2025 Airline. All rights reserved.</p>
+            {/* Right column: phone numbers aligned with the first two aircraft (under Contact Us) */}
+            <div className="text-center">
+              <div>+645737383466</div>
+              <div>+987654345679</div>
+              <div>&nbsp;</div>
+              <div>&nbsp;</div>
+              <div>&nbsp;</div>
+            </div>
+          </div>
+
+          {/* Copyright row */}
+          <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
+            &copy; 2025 Airline. All rights reserved.
+          </div>
+        </div>
       </footer>
     </div>
   );
