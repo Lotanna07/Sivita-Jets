@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
+import Membership from './Membership';   
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,10 +11,10 @@ function App() {
   const [departureDate, setDepartureDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState(1);
+  const [showMembership, setShowMembership] = useState(false);
 
   const languages = ['English', 'Español', '日本語', 'العربية', 'Français', 'Português'];
 
-  // 50 countries list
   const countries = [
     'United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Spain', 'Italy', 'Portugal',
     'Netherlands', 'Switzerland', 'Sweden', 'Norway', 'Denmark', 'Finland', 'Ireland', 'Belgium',
@@ -32,6 +33,10 @@ function App() {
     if (passengers < 14) setPassengers(passengers + 1);
   };
 
+  if (showMembership) {
+    return <Membership onBack={() => setShowMembership(false)} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar – sticky */}
@@ -44,7 +49,7 @@ function App() {
               </svg>
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><a href="#" className="hover:text-blue-600">Membership</a></li>
+              <li><button onClick={() => setShowMembership(true)} className="hover:text-blue-600">Membership</button></li>
               <li><a href="#" className="hover:text-blue-600">Fleet</a></li>
               <li><a href="#" className="hover:text-blue-600">Experience</a></li>
             </ul>
@@ -73,7 +78,7 @@ function App() {
         </div>
       </nav>
 
-      {/* Mobile Drawer – unchanged */}
+      {/* Mobile Drawer */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
@@ -87,7 +92,7 @@ function App() {
             </div>
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Membership</a></li>
+                <li><button onClick={() => { setShowMembership(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Membership</button></li>
                 <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Fleet</a></li>
                 <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Experience</a></li>
               </ul>
@@ -121,22 +126,20 @@ function App() {
           <p className="text-xl md:text-2xl mb-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>Membership without fees</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button className="px-6 py-3 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>Plan a flight</button>
-            <button className="px-6 py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>Membership</button>
+            <button onClick={() => setShowMembership(true)} className="px-6 py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>Membership</button>
           </div>
         </div>
       </header>
 
-      {/* FLIGHT SEARCH FORM – with react-icons inside From/To */}
+      {/* FLIGHT SEARCH FORM */}
       <section className="max-w-5xl mx-auto -mt-16 bg-white rounded-xl shadow-xl p-6 relative z-10">
         <h2 className="text-2xl mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>Book your flight</h2>
 
-        {/* Round Trip Checkbox */}
         <div className="flex items-center gap-2 mb-4">
           <input type="checkbox" id="roundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="w-4 h-4 text-blue-600" />
           <label htmlFor="roundTrip" className="text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>Round trip</label>
         </div>
 
-        {/* Main Grid – dynamic for one‑way / round trip */}
         {!isRoundTrip ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="border p-2 rounded bg-white flex items-center gap-2">
@@ -185,7 +188,6 @@ function App() {
           </div>
         )}
 
-        {/* Row below the grid */}
         <div className="mt-4">
           {isRoundTrip && (
             <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -202,7 +204,7 @@ function App() {
         </div>
       </section>
 
-      {/* ========== MEMBERSHIP SECTION – each card has its own image on top ========== */}
+      {/* ========== MEMBERSHIP SECTION – cards with updated buttons ========== */}
       <div className="max-w-6xl mx-auto mt-16 px-4">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>
           Membership
@@ -217,55 +219,55 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Program Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img 
-              src="timothy.jpg" 
-              alt="Program" 
-              className="w-full h-48 object-cover"
-            />
+            <img src="timothy.jpg" alt="Program" className="w-full h-48 object-cover" />
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>Program</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
                 Our bespoke flight subscription membership, offering guaranteed access to the entire fleet.
               </p>
-              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <button 
+                onClick={() => setShowMembership(true)}
+                className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
+                style={{ fontFamily: "Afacad, sans-serif" }}
+              >
                 View Membership
-              </a>
+              </button>
             </div>
           </div>
 
           {/* VJ25 Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img 
-              src="unsplash.jpg" 
-              alt="VJ25" 
-              className="w-full h-48 object-cover"
-            />
+            <img src="unsplash.jpg" alt="VJ25" className="w-full h-48 object-cover" />
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>VJ25</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
                 The membership for high-quality, low-frequency travel, from 25 flight hours per year.
               </p>
-              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <button 
+                onClick={() => setShowMembership(true)}
+                className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
+                style={{ fontFamily: "Afacad, sans-serif" }}
+              >
                 View Membership
-              </a>
+              </button>
             </div>
           </div>
 
           {/* Corporate Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img 
-              src="WhatsApp.jpeg" 
-              alt="Corporate" 
-              className="w-full h-48 object-cover"
-            />
+            <img src="WhatsApp.jpeg" alt="Corporate" className="w-full h-48 object-cover" />
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>Corporate</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
                 A full suite of flexible business jet solutions for corporations and executives around the world.
               </p>
-              <a href="#" className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <button 
+                onClick={() => setShowMembership(true)}
+                className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
+                style={{ fontFamily: "Afacad, sans-serif" }}
+              >
                 View Membership
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -276,7 +278,6 @@ function App() {
       <div className="max-w-6xl mx-auto mt-20 px-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            {/* Left side: text content */}
             <div className="flex-1 p-6 md:p-8">
               <h2 className="text-4xl md:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>
                 A global jet fleet
@@ -289,34 +290,21 @@ function App() {
                 Explore the fleet
               </a>
             </div>
-            {/* Right side: image */}
             <div className="flex-1 md:max-w-[40%]">
-              <img 
-                src="yaroslav.jpg" 
-                alt="Aircraft fleet" 
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+              <img src="yaroslav.jpg" alt="Aircraft fleet" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
             </div>
           </div>
         </div>
       </div>
       {/* ========================================================== */}
 
-                  {/* ========== SECTION: THE GLOBAL 7500 – CARD WITH IMAGE LEFT, TEXT RIGHT ========== */}
+      {/* ========== SECTION: THE GLOBAL 7500 – CARD WITH IMAGE LEFT, TEXT RIGHT ========== */}
       <div className="max-w-6xl mx-auto mt-20 px-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            {/* Left side: image */}
             <div className="md:w-2/5">
-              <img 
-                src="simon.jpg" 
-                alt="Global 7500" 
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+              <img src="simon.jpg" alt="Global 7500" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
             </div>
-            {/* Right side: text content (right-aligned) */}
             <div className="flex-1 p-6 md:p-8 text-right">
               <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>
                 The Global 7500
@@ -334,15 +322,9 @@ function App() {
       </div>
       {/* =========================================================================== */}
 
-
-                  {/* ========== OUR PROMISE – FULL-WIDTH IMAGE WITH OVERLAY ========== */}
+      {/* ========== OUR PROMISE – FULL-WIDTH IMAGE WITH OVERLAY ========== */}
       <div className="relative w-full mt-20">
-        <img 
-          src="chris.jpg" 
-          alt="Our Promise" 
-          className="w-full h-auto md:h-[500px] object-cover"
-        />
-        {/* Dark overlay */}
+        <img src="chris.jpg" alt="Our Promise" className="w-full h-auto md:h-[500px] object-cover" />
         <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
             Our Promise
@@ -363,29 +345,23 @@ function App() {
       </div>
       {/* ================================================================= */}
 
-            {/* Footer – exact alignment under Fleet and Contact Us, with numbers next to first two aircraft */}
+      {/* Footer */}
       <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-4xl mx-auto px-4">
-          {/* Top row: four links spaced evenly */}
           <div className="flex justify-center gap-8 mb-8">
             <a href="#" className="hover:underline">Fleet</a>
-            <a href="#" className="hover:underline">Membership</a>
+            <button onClick={() => setShowMembership(true)} className="hover:underline">Membership</button>
             <a href="#" className="hover:underline">Experience</a>
             <a href="#" className="hover:underline">Contact Us</a>
           </div>
-
-          {/* Two‑column content: left under Fleet, right under Contact Us */}
           <div className="flex justify-center gap-50 mb-10">
-            {/* Left column: aircraft names (under Fleet) */}
-            <div className="text-center ">
+            <div className="text-center">
               <div>Gulfstream</div>
               <div>Dassault</div>
               <div>Cessna</div>
               <div>Bombardier</div>
               <div>Embraer</div>
             </div>
-
-            {/* Right column: phone numbers aligned with the first two aircraft (under Contact Us) */}
             <div className="text-center">
               <div>+645737383466</div>
               <div>+987654345679</div>
@@ -394,8 +370,6 @@ function App() {
               <div>&nbsp;</div>
             </div>
           </div>
-
-          {/* Copyright row */}
           <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
             &copy; 2025 Airline. All rights reserved.
           </div>
