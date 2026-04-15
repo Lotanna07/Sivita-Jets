@@ -289,8 +289,8 @@ function App() {
   const t = translations[language] || translations.en;
 
   if (showMembership) {
-    return <Membership onBack={() => setShowMembership(false)} language={language} />;
-  }
+  return <Membership onBack={() => setShowMembership(false)} language={language} setLanguage={setLanguage} />;
+}
 
   return (
     <div className="min-h-screen bg-gray-50">
