@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
-import Fleet from './Fleet';   // 👈 new import
+import Fleet from './Fleet';
 
-// ---------- TRANSLATIONS (unchanged – keep yours exactly as they are) ----------
+// ---------- TRANSLATIONS ----------
 const translations = {
   en: {
     navMembership: 'Membership',
@@ -251,7 +251,7 @@ function App() {
   const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState(1);
   const [showMembership, setShowMembership] = useState(false);
-  const [showFleet, setShowFleet] = useState(false);   // 👈 new
+  const [showFleet, setShowFleet] = useState(false);
 
   const languageOptions = [
     { code: 'en', name: 'English' },
@@ -281,18 +281,18 @@ function App() {
 
   const t = translations[language] || translations.en;
 
-  // 👇 Conditional rendering
+  // 👇 Conditional rendering – FIXED: pass language props to Fleet
   if (showFleet) {
-    return <Fleet onBack={() => setShowFleet(false)} />;
+    return <Fleet onBack={() => setShowFleet(false)} language={language} setLanguage={setLanguage} />;
   }
   if (showMembership) {
-  return <Membership 
-    onBack={() => setShowMembership(false)} 
-    language={language} 
-    setLanguage={setLanguage} 
-    onFleetClick={() => setShowFleet(true)}   // 👈 add this line
-  />;
-}
+    return <Membership 
+      onBack={() => setShowMembership(false)} 
+      language={language} 
+      setLanguage={setLanguage} 
+      onFleetClick={() => setShowFleet(true)} 
+    />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -307,7 +307,7 @@ function App() {
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={() => setShowMembership(true)} className="hover:text-blue-600">{t.navMembership}</button></li>
-              <li><button onClick={() => setShowFleet(true)} className="hover:text-blue-600">{t.navFleet}</button></li>   {/* 👈 changed */}
+              <li><button onClick={() => setShowFleet(true)} className="hover:text-blue-600">{t.navFleet}</button></li>
               <li><a href="#" className="hover:text-blue-600">{t.navExperience}</a></li>
             </ul>
           </div>
@@ -350,7 +350,7 @@ function App() {
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { setShowMembership(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navMembership}</button></li>
-                <li><button onClick={() => { setShowFleet(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>   {/* 👈 changed */}
+                <li><button onClick={() => { setShowFleet(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>
                 <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>{t.navExperience}</a></li>
               </ul>
               <hr className="my-4" />
