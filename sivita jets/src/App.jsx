@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
+import Fleet from './Fleet';   // 👈 new import
 
-// ---------- TRANSLATIONS ----------
+// ---------- TRANSLATIONS (unchanged – keep yours exactly as they are) ----------
 const translations = {
   en: {
-    // Navbar
     navMembership: 'Membership',
     navFleet: 'Fleet',
     navExperience: 'Experience',
-    // Hero
     heroTitle: 'Sky Luxury Made Seamless',
     heroSub1: 'Plan a flight and spend hours you need',
     heroSub2: 'Membership without fees',
     heroPlanBtn: 'Plan a flight',
     heroMemberBtn: 'Membership',
-    // Flight search
     bookFlight: 'Book your flight',
     roundTrip: 'Round trip',
     from: 'From',
@@ -23,7 +21,6 @@ const translations = {
     passengers: 'Passengers:',
     max14: 'Max 14',
     search: 'Search',
-    // Membership section
     membershipTitle: 'Membership',
     membershipDesc: 'Sivita offers flexible, investment-free solutions to suit your flying requirements. All Members enjoy global access and unparalleled service on board a consistent and branded fleet of super-midsize, long-range and super-long-range aircraft.',
     programTitle: 'Program',
@@ -33,18 +30,14 @@ const translations = {
     corporateTitle: 'Corporate',
     corporateDesc: 'A full suite of flexible business jet solutions for corporations and executives around the world.',
     viewMembership: 'View Membership',
-    // Global jet fleet
     fleetTitle: 'A global jet fleet',
     fleetDesc: 'Renowned for its consistency, the distinctive silver and red fleet is equipped for all needs — whether you need a fully enabled business suite or a restful home away from home space.',
     exploreFleet: 'Explore the fleet',
-    // Global 7500
     globalTitle: 'The Global 7500',
     globalDesc: 'Sivita unlocks the world with the first Global 7500 fleet, the largest and longest-range business jet. The Global 7500 offers four true living spaces, including a full-size kitchen and a permanent bedroom.',
-    // Our Promise
     promiseTitle: 'Our Promise',
     promiseDesc: 'Want to know more? Let us draft a plan for you. Tell us about your most frequent flights, where you are based, nature of your flights, preferred aircraft, times of the year you fly often and our team of aviation experts will happily give you a real life example of what flying with VistaJet will look like for you. Give us the chance to arrange a consultation and create a personal proposal that perfectly fits all your needs.',
     makeEnquiry: 'Make An Enquiry',
-    // Footer
     footerFleet: 'Fleet',
     footerMembership: 'Membership',
     footerExperience: 'Experience',
@@ -250,7 +243,7 @@ const translations = {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [language, setLanguage] = useState('en');      // language code: en, es, ja, ar, fr, pt
+  const [language, setLanguage] = useState('en');
   const [fromCountry, setFromCountry] = useState('');
   const [toCountry, setToCountry] = useState('');
   const [isRoundTrip, setIsRoundTrip] = useState(false);
@@ -258,8 +251,8 @@ function App() {
   const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState(1);
   const [showMembership, setShowMembership] = useState(false);
+  const [showFleet, setShowFleet] = useState(false);   // 👈 new
 
-  // Language display names for the dropdown
   const languageOptions = [
     { code: 'en', name: 'English' },
     { code: 'es', name: 'Español' },
@@ -288,8 +281,17 @@ function App() {
 
   const t = translations[language] || translations.en;
 
+  // 👇 Conditional rendering
+  if (showFleet) {
+    return <Fleet onBack={() => setShowFleet(false)} />;
+  }
   if (showMembership) {
-  return <Membership onBack={() => setShowMembership(false)} language={language} setLanguage={setLanguage} />;
+  return <Membership 
+    onBack={() => setShowMembership(false)} 
+    language={language} 
+    setLanguage={setLanguage} 
+    onFleetClick={() => setShowFleet(true)}   // 👈 add this line
+  />;
 }
 
   return (
@@ -305,7 +307,7 @@ function App() {
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={() => setShowMembership(true)} className="hover:text-blue-600">{t.navMembership}</button></li>
-              <li><a href="#" className="hover:text-blue-600">{t.navFleet}</a></li>
+              <li><button onClick={() => setShowFleet(true)} className="hover:text-blue-600">{t.navFleet}</button></li>   {/* 👈 changed */}
               <li><a href="#" className="hover:text-blue-600">{t.navExperience}</a></li>
             </ul>
           </div>
@@ -313,7 +315,6 @@ function App() {
             <img src="logo.png" alt="Airline Logo" className="h-20 w-auto" />
           </div>
           <div className="flex items-center gap-4">
-            {/* Language dropdown */}
             <div className="relative group">
               <button className="p-2 rounded-md hover:bg-gray-100 focus:outline-none">
                 <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -323,14 +324,7 @@ function App() {
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
                 <div className="py-1">
                   {languageOptions.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => setLanguage(lang.code)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      style={{ fontFamily: "Afacad, sans-serif" }}
-                    >
-                      {lang.name}
-                    </button>
+                    <button key={lang.code} onClick={() => setLanguage(lang.code)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style={{ fontFamily: "Afacad, sans-serif" }}>{lang.name}</button>
                   ))}
                 </div>
               </div>
@@ -356,7 +350,7 @@ function App() {
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { setShowMembership(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navMembership}</button></li>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>{t.navFleet}</a></li>
+                <li><button onClick={() => { setShowFleet(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>   {/* 👈 changed */}
                 <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>{t.navExperience}</a></li>
               </ul>
               <hr className="my-4" />
@@ -364,14 +358,7 @@ function App() {
                 <p className="text-sm font-semibold mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>Language</p>
                 <div className="space-y-2">
                   {languageOptions.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => { setLanguage(lang.code); setMenuOpen(false); }}
-                      className="block w-full text-left text-sm text-gray-600 hover:text-blue-600"
-                      style={{ fontFamily: "Afacad, sans-serif" }}
-                    >
-                      {lang.name}
-                    </button>
+                    <button key={lang.code} onClick={() => { setLanguage(lang.code); setMenuOpen(false); }} className="block w-full text-left text-sm text-gray-600 hover:text-blue-600" style={{ fontFamily: "Afacad, sans-serif" }}>{lang.name}</button>
                   ))}
                 </div>
               </div>
@@ -385,7 +372,7 @@ function App() {
         </div>
       )}
 
-      {/* HERO SECTION WITH VIDEO + TWO BUTTONS */}
+      {/* HERO SECTION */}
       <header className="relative h-[70vh] overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover" poster="https://placehold.co/1920x1080">
           <source src="airline.mp4" type="video/mp4" />
@@ -404,12 +391,10 @@ function App() {
       {/* FLIGHT SEARCH FORM */}
       <section className="max-w-5xl mx-auto -mt-16 bg-white rounded-xl shadow-xl p-6 relative z-10">
         <h2 className="text-2xl mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.bookFlight}</h2>
-
         <div className="flex items-center gap-2 mb-4">
           <input type="checkbox" id="roundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="w-4 h-4 text-blue-600" />
           <label htmlFor="roundTrip" className="text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.roundTrip}</label>
         </div>
-
         {!isRoundTrip ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="border p-2 rounded bg-white flex items-center gap-2">
@@ -457,7 +442,6 @@ function App() {
             <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} className="border p-2 rounded" />
           </div>
         )}
-
         <div className="mt-4">
           {isRoundTrip && (
             <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -474,13 +458,11 @@ function App() {
         </div>
       </section>
 
-      {/* ========== MEMBERSHIP SECTION – cards with updated buttons ========== */}
+      {/* MEMBERSHIP SECTION */}
       <div className="max-w-6xl mx-auto mt-16 px-4">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>{t.membershipTitle}</h2>
         <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>{t.membershipDesc}</p>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Program Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <img src="timothy.jpg" alt="Program" className="w-full h-48 object-cover" />
             <div className="p-6">
@@ -489,8 +471,6 @@ function App() {
               <button onClick={() => setShowMembership(true)} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
-
-          {/* VJ25 Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <img src="unsplash.jpg" alt="VJ25" className="w-full h-48 object-cover" />
             <div className="p-6">
@@ -499,8 +479,6 @@ function App() {
               <button onClick={() => setShowMembership(true)} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
-
-          {/* Corporate Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             <img src="WhatsApp.jpeg" alt="Corporate" className="w-full h-48 object-cover" />
             <div className="p-6">
@@ -511,16 +489,15 @@ function App() {
           </div>
         </div>
       </div>
-      {/* =================================================== */}
 
-      {/* ========== SECTION: A GLOBAL JET FLEET – CARD STYLE ========== */}
+      {/* A GLOBAL JET FLEET CARD */}
       <div className="max-w-6xl mx-auto mt-20 px-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
             <div className="flex-1 p-6 md:p-8">
               <h2 className="text-4xl md:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>{t.fleetTitle}</h2>
               <p className="text-lg text-gray-700 mt-6 text-left" style={{ fontFamily: "Afacad, sans-serif" }}>{t.fleetDesc}</p>
-              <a href="#" className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</a>
+              <button onClick={() => setShowFleet(true)} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
             <div className="flex-1 md:max-w-[40%]">
               <img src="yaroslav.jpg" alt="Aircraft fleet" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
@@ -528,9 +505,8 @@ function App() {
           </div>
         </div>
       </div>
-      {/* ========================================================== */}
 
-      {/* ========== SECTION: THE GLOBAL 7500 – CARD WITH IMAGE LEFT, TEXT RIGHT ========== */}
+      {/* THE GLOBAL 7500 CARD */}
       <div className="max-w-6xl mx-auto mt-20 px-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
@@ -540,14 +516,13 @@ function App() {
             <div className="flex-1 p-6 md:p-8 text-right">
               <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>{t.globalTitle}</h2>
               <p className="text-lg text-gray-700 mt-6 max-w-3xl ml-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.globalDesc}</p>
-              <a href="#" className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</a>
+              <button onClick={() => setShowFleet(true)} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
           </div>
         </div>
       </div>
-      {/* =========================================================================== */}
 
-      {/* ========== OUR PROMISE – FULL-WIDTH IMAGE WITH OVERLAY ========== */}
+      {/* OUR PROMISE SECTION */}
       <div className="relative w-full mt-20">
         <img src="chris.jpg" alt="Our Promise" className="w-full h-auto md:h-[500px] object-cover" />
         <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-4">
@@ -556,13 +531,12 @@ function App() {
           <button className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.makeEnquiry}</button>
         </div>
       </div>
-      {/* ================================================================= */}
 
       {/* Footer */}
       <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8 mb-8">
-            <a href="#" className="hover:underline">{t.footerFleet}</a>
+            <button onClick={() => setShowFleet(true)} className="hover:underline">{t.footerFleet}</button>
             <button onClick={() => setShowMembership(true)} className="hover:underline">{t.footerMembership}</button>
             <a href="#" className="hover:underline">{t.footerExperience}</a>
             <a href="#" className="hover:underline">{t.footerContact}</a>

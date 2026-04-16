@@ -156,7 +156,7 @@ const languageOptions = [
   { code: 'pt', name: 'Português' },
 ];
 
-function Membership({ onBack, language = 'en', setLanguage }) {
+function Membership({ onBack, language = 'en', setLanguage, onFleetClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -208,7 +208,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={() => onBack()} className="hover:text-blue-600">Home</button></li>
-              <li><a href="#" className="hover:text-blue-600">Fleet</a></li>
+              <li><button onClick={onFleetClick} className="hover:text-blue-600">Fleet</button></li>
               <li><a href="#" className="hover:text-blue-600">Experience</a></li>
             </ul>
           </div>
@@ -251,7 +251,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { onBack(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Home</button></li>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Fleet</a></li>
+                <li><button onClick={() => { onFleetClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Fleet</button></li>
                 <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Experience</a></li>
               </ul>
               <hr className="my-4" />
@@ -365,7 +365,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
               <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
-            {/* Checkbox 1 - Marketing communications */}
+            {/* Checkbox 1 */}
             <div className="flex items-start gap-3">
               <input 
                 type="checkbox" 
@@ -380,7 +380,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
               </label>
             </div>
 
-            {/* Checkbox 2 - Privacy notice (required) */}
+            {/* Checkbox 2 (required) */}
             <div className="flex items-start gap-3">
               <input 
                 type="checkbox" 
@@ -403,7 +403,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
         </div>
       </div>
 
-      {/* Second Big Image with overlay */}
+      {/* Second Big Image with overlay – Discover fleet button */}
       <div className="relative h-[70vh] w-full overflow-hidden">
         <img 
           src="ramon.jpg" 
@@ -421,6 +421,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
             {t.fleetOverlayDesc}
           </p>
           <button 
+            onClick={onFleetClick}
             className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold"
             style={{ fontFamily: "Afacad, sans-serif" }}
           >
@@ -429,11 +430,11 @@ function Membership({ onBack, language = 'en', setLanguage }) {
         </div>
       </div>
 
-      {/* Footer – exact same as App.jsx */}
+      {/* Footer */}
       <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8 mb-8">
-            <a href="#" className="hover:underline">Fleet</a>
+            <button onClick={onFleetClick} className="hover:underline">Fleet</button>
             <button onClick={onBack} className="hover:underline">Membership</button>
             <a href="#" className="hover:underline">Experience</a>
             <a href="#" className="hover:underline">Contact Us</a>
