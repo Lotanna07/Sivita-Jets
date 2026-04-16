@@ -406,7 +406,7 @@ function Membership({ onBack, language = 'en', setLanguage }) {
       {/* Second Big Image with overlay */}
       <div className="relative h-[70vh] w-full overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1542296332-2e4473faf563?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+          src="ramon.jpg" 
           alt="Luxury jet interior" 
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
