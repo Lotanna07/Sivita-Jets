@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
 import Fleet from './Fleet';
+import Experience from './Experience';
 
 // ---------- TRANSLATIONS ----------
 const translations = {
@@ -252,6 +253,7 @@ function App() {
   const [passengers, setPassengers] = useState(1);
   const [showMembership, setShowMembership] = useState(false);
   const [showFleet, setShowFleet] = useState(false);
+  const [showExperience, setShowExperience] = useState(false);
 
   const languageOptions = [
     { code: 'en', name: 'English' },
@@ -281,16 +283,38 @@ function App() {
 
   const t = translations[language] || translations.en;
 
-  // 👇 Conditional rendering – FIXED: pass language props to Fleet
+  // Conditional rendering – UPDATED: Experience now receives onFleetClick and onMembershipClick
+    // Conditional rendering
+ if (showExperience) {
+  return <Experience 
+    onBack={() => setShowExperience(false)} 
+    language={language} 
+    setLanguage={setLanguage} 
+    onFleetClick={() => {
+      setShowExperience(false);
+      setShowFleet(true);
+    }}
+    onMembershipClick={() => {
+      setShowExperience(false);
+      setShowMembership(true);
+    }}
+  />;
+}
   if (showFleet) {
-    return <Fleet onBack={() => setShowFleet(false)} language={language} setLanguage={setLanguage} />;
+    return <Fleet 
+      onBack={() => setShowFleet(false)} 
+      language={language} 
+      setLanguage={setLanguage} 
+      onExperienceClick={() => setShowExperience(true)} 
+    />;
   }
   if (showMembership) {
     return <Membership 
       onBack={() => setShowMembership(false)} 
       language={language} 
       setLanguage={setLanguage} 
-      onFleetClick={() => setShowFleet(true)} 
+      onFleetClick={() => setShowFleet(true)}
+      onExperienceClick={() => setShowExperience(true)}
     />;
   }
 
@@ -308,7 +332,7 @@ function App() {
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={() => setShowMembership(true)} className="hover:text-blue-600">{t.navMembership}</button></li>
               <li><button onClick={() => setShowFleet(true)} className="hover:text-blue-600">{t.navFleet}</button></li>
-              <li><a href="#" className="hover:text-blue-600">{t.navExperience}</a></li>
+              <li><button onClick={() => setShowExperience(true)} className="hover:text-blue-600">{t.navExperience}</button></li>
             </ul>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -351,7 +375,7 @@ function App() {
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { setShowMembership(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navMembership}</button></li>
                 <li><button onClick={() => { setShowFleet(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>{t.navExperience}</a></li>
+                <li><button onClick={() => { setShowExperience(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navExperience}</button></li>
               </ul>
               <hr className="my-4" />
               <div>
@@ -372,7 +396,7 @@ function App() {
         </div>
       )}
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION WITH VIDEO + TWO BUTTONS */}
       <header className="relative h-[70vh] overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover" poster="https://placehold.co/1920x1080">
           <source src="airline.mp4" type="video/mp4" />
@@ -538,7 +562,7 @@ function App() {
           <div className="flex justify-center gap-8 mb-8">
             <button onClick={() => setShowFleet(true)} className="hover:underline">{t.footerFleet}</button>
             <button onClick={() => setShowMembership(true)} className="hover:underline">{t.footerMembership}</button>
-            <a href="#" className="hover:underline">{t.footerExperience}</a>
+            <button onClick={() => setShowExperience(true)} className="hover:underline">{t.footerExperience}</button>
             <a href="#" className="hover:underline">{t.footerContact}</a>
           </div>
           <div className="flex justify-center gap-50 mb-10">

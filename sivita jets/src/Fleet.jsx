@@ -9,7 +9,7 @@ const languageOptions = [
   { code: 'pt', name: 'Português' },
 ];
 
-function Fleet({ onBack, language = 'en', setLanguage }) {
+function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -78,7 +78,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={onBack} className="hover:text-blue-600">Home</button></li>
               <li><span className="cursor-default">Fleet</span></li>
-              <li><a href="#" className="hover:text-blue-600">Experience</a></li>
+              <li><button onClick={onExperienceClick} className="hover:text-blue-600">Experience</button></li>
             </ul>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -121,7 +121,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { onBack(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Home</button></li>
                 <li><span className="block text-xl cursor-default">Fleet</span></li>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Experience</a></li>
+                <li><button onClick={() => { onExperienceClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Experience</button></li>
               </ul>
               <hr className="my-4" />
               <div>
@@ -291,7 +291,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
         />
       </div>
 
-      {/* ========== CONTACT FORM SECTION (same as Membership.jsx) ========== */}
+      {/* ========== CONTACT FORM SECTION ========== */}
       <div className="max-w-4xl mx-auto mt-20 px-4 pb-20">
         <div className="bg-white rounded-xl shadow-md p-6 md:p-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
@@ -341,7 +341,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
               <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
-            {/* Checkbox 1 - Marketing communications */}
+            {/* Checkbox 1 */}
             <div className="flex items-start gap-3">
               <input 
                 type="checkbox" 
@@ -356,7 +356,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
               </label>
             </div>
 
-            {/* Checkbox 2 - Privacy notice (required) */}
+            {/* Checkbox 2 (required) */}
             <div className="flex items-start gap-3">
               <input 
                 type="checkbox" 
@@ -385,7 +385,7 @@ function Fleet({ onBack, language = 'en', setLanguage }) {
           <div className="flex justify-center gap-8 mb-8">
             <span className="cursor-default">Fleet</span>
             <button onClick={onBack} className="hover:underline">Membership</button>
-            <a href="#" className="hover:underline">Experience</a>
+            <button onClick={onExperienceClick} className="hover:underline">Experience</button>
             <a href="#" className="hover:underline">Contact Us</a>
           </div>
           <div className="flex justify-center gap-50 mb-10">

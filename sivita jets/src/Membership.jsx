@@ -156,7 +156,7 @@ const languageOptions = [
   { code: 'pt', name: 'Português' },
 ];
 
-function Membership({ onBack, language = 'en', setLanguage, onFleetClick }) {
+function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExperienceClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -209,7 +209,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick }) {
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
               <li><button onClick={() => onBack()} className="hover:text-blue-600">Home</button></li>
               <li><button onClick={onFleetClick} className="hover:text-blue-600">Fleet</button></li>
-              <li><a href="#" className="hover:text-blue-600">Experience</a></li>
+              <li><button onClick={onExperienceClick} className="hover:text-blue-600">Experience</button></li>
             </ul>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -252,7 +252,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick }) {
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
                 <li><button onClick={() => { onBack(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Home</button></li>
                 <li><button onClick={() => { onFleetClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Fleet</button></li>
-                <li><a href="#" className="block text-xl hover:text-blue-600" onClick={() => setMenuOpen(false)}>Experience</a></li>
+                <li><button onClick={() => { onExperienceClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Experience</button></li>
               </ul>
               <hr className="my-4" />
               <div>
@@ -436,7 +436,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick }) {
           <div className="flex justify-center gap-8 mb-8">
             <button onClick={onFleetClick} className="hover:underline">Fleet</button>
             <button onClick={onBack} className="hover:underline">Membership</button>
-            <a href="#" className="hover:underline">Experience</a>
+            <button onClick={onExperienceClick} className="hover:underline">Experience</button>
             <a href="#" className="hover:underline">Contact Us</a>
           </div>
           <div className="flex justify-center gap-50 mb-10">
