@@ -94,14 +94,59 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       )}
 
+      {/* ========== BIG IMAGE HERO ========== */}
+      <div className="relative h-[70vh] w-full overflow-hidden">
+        <img
+          src="richard.jpg"
+          alt="Luxury flight experience"
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40 flex flex-col justify-between items-center text-center px-4 py-12">
+          <div className="flex-1 flex flex-col justify-center">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+              The ultimate cabin experience
+            </h1>
+            <p className="text-xl md:text-2xl text-white" style={{ fontFamily: "Afacad, sans-serif" }}>
+              Tailored and unparalleled service
+            </p>
+          </div>
+          <button className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>
+            Enquire Now
+          </button>
+        </div>
+      </div>
+
       {/* Main content */}
       <div className="max-w-6xl mx-auto px-4 py-20 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
-          Experience
+          Private jet in-flight services
         </h1>
-        <p className="text-lg text-gray-700" style={{ fontFamily: "Afacad, sans-serif" }}>
-          Add your experience content here – luxury services, onboard amenities, testimonials, etc.
+        <p className="text-lg text-gray-700 mb-10" style={{ fontFamily: "Afacad, sans-serif" }}>
+          sivitaJet redefines private aviation with its exquisite cabin design and world-class in-flight services.
+          Stepping aboard a sivitaJet aircraft is like entering a luxurious home in the sky, where every detail is
+          meticulously crafted to ensure comfort, productivity, and relaxation.
         </p>
+
+        {/* Small image */}
+        <div className="flex justify-center mb-8">
+          <img
+            src="WhatsApp2.jpeg"
+            alt="Private jet interior"
+            className="w-64 rounded-lg shadow-md object-cover mx-auto"
+          />
+        </div>
+
+        {/* Quote paragraph */}
+        <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>
+          "At the heart of the service provided by sivitaJet Cabin Hosts is a genuine care for passengers and
+          the passion for service excellence. We want you to feel as comfortable as possible on board —
+          no request is too large or too small."
+        </p>
+
+        {/* New heading */}
+        <h1 className="text-3xl md:text-4xl font-bold text-center" style={{ fontFamily: "Apple Garamond, serif" }}>
+          GEMMA ANNE-JONES, CABIN TRAINING & DEVELOPMENT MANAGER
+        </h1>
       </div>
 
       {/* Footer */}
