@@ -1,5 +1,200 @@
 import React, { useState } from 'react';
 
+const experienceTranslations = {
+  en: {
+    // Navbar
+    home: 'Home',
+    fleet: 'Fleet',
+    experience: 'Experience',
+    // Hero 1 (big image)
+    hero1Title: 'The ultimate cabin experience',
+    hero1Sub: 'Tailored and unparalleled service',
+    hero1Btn: 'Enquire Now',
+    // Main section
+    mainHeading: 'Private jet in-flight services',
+    mainDesc: 'sivitaJet redefines private aviation with its exquisite cabin design and world-class in-flight services. Stepping aboard a sivitaJet aircraft is like entering a luxurious home in the sky, where every detail is meticulously crafted to ensure comfort, productivity, and relaxation.',
+    // Quote
+    quote: '"At the heart of the service provided by sivitaJet Cabin Hosts is a genuine care for passengers and the passion for service excellence. We want you to feel as comfortable as possible on board — no request is too large or too small."',
+    // Gemma heading
+    gemmaHeading: 'GEMMA ANNE-JONES, CABIN TRAINING & DEVELOPMENT MANAGER',
+    // A home away from home
+    homeAwayHeading: 'A home away from home',
+    homeAwayDesc: 'Sivitajets cabin design, consistent across the whole fleet, welcomes travelers all over the world. Passengers can use a fully enabled business suite or relax in a restful family space. The cabins are equipped for all needs.',
+    // The most experienced team
+    teamHeading: 'The most experienced team',
+    teamDesc: 'To ensure passengers enjoy unrivaled service as standard, every Sivitajet flight has at least one Cabin Host as well as two pilots in the flight deck. Pilots only fly one aircraft type, to ensure maximum familiarity and instinctive reactions to any situation, and train twice a year. VistaJet Ltd. Cabin Crew are trained by the British Butler Institute, MedAire, Norland College and Wine & Spirit Education Trust.',
+    // Private Dining
+    diningHeading: 'Private Dining',
+    diningDesc: 'Our Private Dining team manages our on-board catering, providing you with extensive dining options — from exclusive menus curated by world renowned chefs for SivitaJets, catering from Michelin star and partner restaurants globally, to a personalized menu prepared by sivitaJet’s in-house nutritionist or your favorite dish.',
+    // Wine in the sky
+    wineHeading: 'Wine in the sky',
+    wineDesc: 'A search for the perfect glass of wine at 40,000 feet inspired a Wine Program that offers the finest wines that taste the best at altitude. Sourced from some of the world’s most iconic vineyards, all sivitaJet passengers can enjoy our wines that take advantage of the effects of altitude to perform best in the sky.',
+    // Adventures in the sky
+    adventuresHeading: 'Adventures in the sky',
+    adventuresDesc: 'SivitaJet offers the most extensive travelers\' program for children. Bringing to life extraordinary experiences that combine unique entertainment and educational elements, it is tailored to your child\'s age and interests to make every journey memorable.',
+    // Hero 2 (second big image)
+    hero2Title: 'Experience the Extraordinary',
+    hero2Sub: 'Discover a new standard of private aviation',
+    hero2Btn: 'Explore More',
+    // Footer
+    footerFleet: 'Fleet',
+    footerMembership: 'Membership',
+    footerExperience: 'Experience',
+    footerContact: 'Contact Us',
+    footerCopyright: '© 2025 Airline. All rights reserved.',
+  },
+  es: {
+    home: 'Inicio',
+    fleet: 'Flota',
+    experience: 'Experiencia',
+    hero1Title: 'La experiencia de cabina definitiva',
+    hero1Sub: 'Servicio personalizado e incomparable',
+    hero1Btn: 'Consultar ahora',
+    mainHeading: 'Servicios a bordo de jet privado',
+    mainDesc: 'sivitaJet redefine la aviación privada con su exquisito diseño de cabina y servicios de clase mundial a bordo. Subir a bordo de un avión sivitaJet es como entrar en un hogar de lujo en el cielo, donde cada detalle está meticulosamente diseñado para garantizar comodidad, productividad y relajación.',
+    quote: '"En el corazón del servicio proporcionado por los anfitriones de cabina de sivitaJet hay un cuidado genuino por los pasajeros y la pasión por la excelencia en el servicio. Queremos que se sienta lo más cómodo posible a bordo — ninguna petición es demasiado grande o pequeña."',
+    gemmaHeading: 'GEMMA ANNE-JONES, GERENTE DE FORMACIÓN Y DESARROLLO DE CABINA',
+    homeAwayHeading: 'Un hogar lejos del hogar',
+    homeAwayDesc: 'El diseño de cabina de Sivitajets, consistente en toda la flota, recibe a viajeros de todo el mundo. Los pasajeros pueden usar una suite de negocios completamente equipada o relajarse en un espacio familiar. Las cabinas están equipadas para todas las necesidades.',
+    teamHeading: 'El equipo más experimentado',
+    teamDesc: 'Para garantizar que los pasajeros disfruten de un servicio inigualable como estándar, cada vuelo de Sivitajet tiene al menos un anfitrión de cabina y dos pilotos en la cabina de vuelo. Los pilotos solo vuelan un tipo de aeronave, para garantizar la máxima familiaridad y reacciones instintivas ante cualquier situación, y entrenan dos veces al año. La tripulación de cabina de VistaJet Ltd. está capacitada por el British Butler Institute, MedAire, Norland College y Wine & Spirit Education Trust.',
+    diningHeading: 'Cena privada',
+    diningDesc: 'Nuestro equipo de cena privada gestiona la catering a bordo, ofreciéndole amplias opciones gastronómicas — desde menús exclusivos seleccionados por chefs de renombre mundial para SivitaJets, catering de restaurantes con estrella Michelin y socios globales, hasta un menú personalizado preparado por el nutricionista interno de sivitaJet o su plato favorito.',
+    wineHeading: 'Vino en el cielo',
+    wineDesc: 'La búsqueda de la copa de vino perfecta a 40,000 pies inspiró un programa de vinos que ofrece los mejores vinos que saben mejor a gran altitud. Obtenidos de algunos de los viñedos más emblemáticos del mundo, todos los pasajeros de sivitaJet pueden disfrutar de nuestros vinos que aprovechan los efectos de la altitud para rendir mejor en el cielo.',
+    adventuresHeading: 'Aventuras en el cielo',
+    adventuresDesc: 'SivitaJet ofrece el programa de viajes más extenso para niños. Dando vida a experiencias extraordinarias que combinan entretenimiento único y elementos educativos, está adaptado a la edad e intereses de su hijo para hacer que cada viaje sea memorable.',
+    hero2Title: 'Experimente lo extraordinario',
+    hero2Sub: 'Descubra un nuevo estándar de aviación privada',
+    hero2Btn: 'Explorar más',
+    footerFleet: 'Flota',
+    footerMembership: 'Membresía',
+    footerExperience: 'Experiencia',
+    footerContact: 'Contáctenos',
+    footerCopyright: '© 2025 Aerolínea. Todos los derechos reservados.',
+  },
+  ja: {
+    home: 'ホーム',
+    fleet: '機材',
+    experience: '体験',
+    hero1Title: '究極のキャビン体験',
+    hero1Sub: 'オーダーメイドの比類なきサービス',
+    hero1Btn: 'お問い合わせ',
+    mainHeading: 'プライベートジェット機内サービス',
+    mainDesc: 'sivitaJetは、絶妙なキャビンデザインとワールドクラスの機内サービスでプライベート航空を再定義します。sivitaJetの航空機に搭乗することは、まるで空の豪華な我が家に入るようなもので、細部に至るまで快適さ、生産性、リラクゼーションを確保するために細心の注意を払って作られています。',
+    quote: '「sivitaJetキャビンホストが提供するサービスの中心には、乗客への真のケアとサービス卓越性への情熱があります。私たちはお客様に機内でできるだけ快適に過ごしていただきたいと考えています。どんなリクエストも大きすぎたり小さすぎたりすることはありません。」',
+    gemmaHeading: 'ジェマ・アン＝ジョーンズ、キャビントレーニング＆ディベロップメントマネージャー',
+    homeAwayHeading: '家のような空間',
+    homeAwayDesc: 'Sivitajetsのキャビンデザインは、全機隊で一貫しており、世界中の旅行者を歓迎します。乗客は完全装備のビジネススイートを使用したり、リラックスしたファミリースペースでくつろぐことができます。キャビンはあらゆるニーズに対応するために装備されています。',
+    teamHeading: '最も経験豊富なチーム',
+    teamDesc: '乗客が標準として比類のないサービスを楽しめるように、すべてのSivitajetフライトには少なくとも1名のキャビンホストと2名のパイロットがフライトデッキにいます。パイロットは1種類の航空機のみを操縦し、あらゆる状況に最大限の熟悉と本能的反応を確保し、年に2回訓練を受けます。VistaJet Ltd.の客室乗務員は、British Butler Institute、MedAire、Norland College、Wine & Spirit Education Trustによって訓練されています。',
+    diningHeading: 'プライベートダイニング',
+    diningDesc: 'プライベートダイニングチームは機内のケータリングを管理し、幅広いダイニングオプションを提供します。世界的に有名なシェフがSivitaJetsのためにキュレーションした特別メニュー、ミシュランスターおよびパートナーレストランからのケータリングから、sivitaJet社内の栄養士またはお好みの料理によって準備されたパーソナライズされたメニューまで。',
+    wineHeading: '空のワイン',
+    wineDesc: '40,000フィートでの完璧なワイングラスを求めて、高度で最も美味しい最高級ワインを提供するワインプログラムが生まれました。世界で最も象徴的なブドウ園から調達されたすべてのsivitaJet乗客は、高度の影響を利用して空で最高のパフォーマンスを発揮するワインを楽しむことができます。',
+    adventuresHeading: '空の冒険',
+    adventuresDesc: 'SivitaJetは、子供向けの最も充実した旅行者プログラムを提供しています。ユニークなエンターテイメントと教育的要素を組み合わせた特別な体験を提供し、お子様の年齢と興味に合わせて調整され、あらゆる旅を思い出深いものにします。',
+    hero2Title: '特別な体験を',
+    hero2Sub: '新しいプライベート航空の基準を発見',
+    hero2Btn: 'さらに詳しく',
+    footerFleet: '機材',
+    footerMembership: 'メンバーシップ',
+    footerExperience: '体験',
+    footerContact: 'お問い合わせ',
+    footerCopyright: '© 2025 航空会社. 無断転載を禁じます。',
+  },
+  ar: {
+    home: 'الرئيسية',
+    fleet: 'الأسطول',
+    experience: 'التجربة',
+    hero1Title: 'تجربة الكابينة النهائية',
+    hero1Sub: 'خدمة مخصصة لا تضاهى',
+    hero1Btn: 'استفسر الآن',
+    mainHeading: 'خدمات الطائرات الخاصة أثناء الطيران',
+    mainDesc: 'تعيد sivitaJet تعريف الطيران الخاص بتصميمها الرائع للمقصورة وخدماتها العالمية على متن الطائرة. الصعود على متن طائرة sivitaJet يشبه دخول منزل فاخر في السماء، حيث تم تصميم كل التفاصيل بدقة لضمان الراحة والإنتاجية والاسترخاء.',
+    quote: '"في قلب الخدمة التي يقدمها مضيفو مقصورة sivitaJet يكمن الاهتمام الحقيقي بالركاب والشغف بالتميز في الخدمة. نريدك أن تشعر بأقصى درجات الراحة على متن الطائرة — لا يوجد طلب كبير جدًا أو صغير جدًا."',
+    gemmaHeading: 'جيما آن جونز، مديرة التدريب وتطوير الكابينة',
+    homeAwayHeading: 'بيت بعيد عن المنزل',
+    homeAwayDesc: 'تصميم كابينة Sivitajets، المتسق عبر الأسطول بأكمله، يرحب بالمسافرين من جميع أنحاء العالم. يمكن للركاب استخدام جناح أعمال مجهز بالكامل أو الاسترخاء في مساحة عائلية مريحة. الكبائن مجهزة لجميع الاحتياجات.',
+    teamHeading: 'الفريق الأكثر خبرة',
+    teamDesc: 'لضمان استمتاع الركاب بخدمة لا تضاهى كمعيار، تحتوي كل رحلة من رحلات Sivitajet على مضيف كابينة واحد على الأقل بالإضافة إلى طيارين في قمرة القيادة. الطيارون يطيرون بنوع واحد فقط من الطائرات، لضمان أقصى درجات الألفة وردود الفعل الغريزية لأي موقف، ويتدربون مرتين في السنة. يتم تدريب طاقم المقصورة في VistaJet Ltd. من قبل معهد الخدم البريطاني، MedAire، كلية نورلاند وصندوق تعليم النبيذ والروح.',
+    diningHeading: 'تناول الطعام الخاص',
+    diningDesc: 'يدير فريق تناول الطعام الخاص لدينا خدمات التموين على متن الطائرة، ويوفر لك خيارات طعام واسعة — من قوائم حصرية من إعداد طهاة عالميين لـ SivitaJets، وتقديم الطعام من مطاعم ميشلان والشركاء العالمية، إلى قائمة طعام مخصصة أعدها أخصائي التغذية الداخلي في sivitaJet أو طبقك المفضل.',
+    wineHeading: 'النبيذ في السماء',
+    wineDesc: 'ألهم البحث عن كأس النبيذ المثالي على ارتفاع 40,000 قدم برنامج نبيذ يقدم أفضل أنواع النبيذ التي تتمتع بأفضل طعم على ارتفاعات عالية. يتم الحصول عليها من بعض مزارع الكروم الأكثر شهرة في العالم، ويمكن لجميع ركاب sivitaJet الاستمتاع بنبيذنا الذي يستفيد من تأثيرات الارتفاع لأداء أفضل في السماء.',
+    adventuresHeading: 'مغامرات في السماء',
+    adventuresDesc: 'تقدم SivitaJet برنامج المسافرين الأكثر شمولاً للأطفال. من خلال إحياء تجارب استثنائية تجمع بين الترفيه الفريد والعناصر التعليمية، تم تصميمها وفقًا لعمر طفلك واهتماماته لجعل كل رحلة لا تُنسى.',
+    hero2Title: 'جرب الاستثنائي',
+    hero2Sub: 'اكتشف معيارًا جديدًا للطيران الخاص',
+    hero2Btn: 'استكشف المزيد',
+    footerFleet: 'الأسطول',
+    footerMembership: 'العضوية',
+    footerExperience: 'التجربة',
+    footerContact: 'اتصل بنا',
+    footerCopyright: '© 2025 الخطوط الجوية. جميع الحقوق محفوظة.',
+  },
+  fr: {
+    home: 'Accueil',
+    fleet: 'Flotte',
+    experience: 'Expérience',
+    hero1Title: 'L’expérience cabine ultime',
+    hero1Sub: 'Service sur mesure et inégalé',
+    hero1Btn: 'Demander maintenant',
+    mainHeading: 'Services à bord d’avions privés',
+    mainDesc: 'sivitaJet redéfinit l’aviation privée avec son design de cabine exquis et ses services de classe mondiale à bord. Monter à bord d’un avion sivitaJet, c’est comme entrer dans une maison de luxe dans le ciel, où chaque détail est méticuleusement conçu pour garantir confort, productivité et détente.',
+    quote: '« Au cœur du service fourni par les hôtes de cabine sivitaJet se trouve un véritable souci des passagers et la passion de l’excellence du service. Nous voulons que vous vous sentiez le plus à l’aise possible à bord — aucune demande n’est trop grande ou trop petite. »',
+    gemmaHeading: 'GEMMA ANNE-JONES, RESPONSABLE DE LA FORMATION ET DU DÉVELOPPEMENT DE LA CABINE',
+    homeAwayHeading: 'Un chez-soi loin de chez soi',
+    homeAwayDesc: 'La conception des cabines Sivitajets, cohérente sur toute la flotte, accueille les voyageurs du monde entier. Les passagers peuvent utiliser une suite entièrement équipée pour les affaires ou se détendre dans un espace familial reposant. Les cabines sont équipées pour tous les besoins.',
+    teamHeading: 'L’équipe la plus expérimentée',
+    teamDesc: 'Pour que les passagers bénéficient d’un service inégalé en standard, chaque vol Sivitajet compte au moins un hôte de cabine ainsi que deux pilotes dans le poste de pilotage. Les pilotes ne pilotent qu’un seul type d’avion, afin de garantir une familiarité maximale et des réactions instinctives face à toute situation, et ils s’entraînent deux fois par an. L’équipage de cabine de VistaJet Ltd. est formé par le British Butler Institute, MedAire, Norland College et le Wine & Spirit Education Trust.',
+    diningHeading: 'Dîner privé',
+    diningDesc: 'Notre équipe de restauration privée gère la restauration à bord, vous offrant de nombreuses options de restauration — des menus exclusifs organisés par des chefs de renommée mondiale pour SivitaJets, la restauration de restaurants étoilés Michelin et partenaires mondiaux, à un menu personnalisé préparé par le nutritionniste interne de sivitaJet ou votre plat préféré.',
+    wineHeading: 'Vin dans le ciel',
+    wineDesc: 'La recherche du verre de vin parfait à 40 000 pieds a inspiré un programme vinicole qui offre les meilleurs vins qui ont le meilleur goût en altitude. Provenant de certains des vignobles les plus emblématiques du monde, tous les passagers sivitaJet peuvent profiter de nos vins qui tirent parti des effets de l’altitude pour obtenir les meilleures performances dans le ciel.',
+    adventuresHeading: 'Aventures dans le ciel',
+    adventuresDesc: 'SivitaJet propose le programme de voyage le plus complet pour les enfants. Donnant vie à des expériences extraordinaires qui allient divertissement unique et éléments éducatifs, il est adapté à l’âge et aux intérêts de votre enfant pour rendre chaque voyage mémorable.',
+    hero2Title: 'Vivez l’extraordinaire',
+    hero2Sub: 'Découvrez une nouvelle norme d’aviation privée',
+    hero2Btn: 'Explorer plus',
+    footerFleet: 'Flotte',
+    footerMembership: 'Adhésion',
+    footerExperience: 'Expérience',
+    footerContact: 'Contactez-nous',
+    footerCopyright: '© 2025 Compagnie aérienne. Tous droits réservés.',
+  },
+  pt: {
+    home: 'Início',
+    fleet: 'Frota',
+    experience: 'Experiência',
+    hero1Title: 'A experiência de cabine definitiva',
+    hero1Sub: 'Serviço personalizado e incomparável',
+    hero1Btn: 'Consultar agora',
+    mainHeading: 'Serviços a bordo de jato particular',
+    mainDesc: 'A sivitaJet redefine a aviação privada com seu requintado design de cabine e serviços de classe mundial a bordo. Embarcar em uma aeronave sivitaJet é como entrar em uma casa luxuosa no céu, onde cada detalhe é meticulosamente elaborado para garantir conforto, produtividade e relaxamento.',
+    quote: '"No coração do serviço prestado pelos anfitriões de cabine da sivitaJet está um cuidado genuíno pelos passageiros e a paixão pela excelência do serviço. Queremos que você se sinta o mais confortável possível a bordo — nenhum pedido é grande demais ou pequeno demais."',
+    gemmaHeading: 'GEMMA ANNE-JONES, GERENTE DE TREINAMENTO E DESENVOLVIMENTO DE CABINE',
+    homeAwayHeading: 'Um lar longe de casa',
+    homeAwayDesc: 'O design de cabine da Sivitajets, consistente em toda a frota, acolhe viajantes de todo o mundo. Os passageiros podem usar uma suíte de negócios totalmente equipada ou relaxar em um espaço familiar. As cabines são equipadas para todas as necessidades.',
+    teamHeading: 'A equipe mais experiente',
+    teamDesc: 'Para garantir que os passageiros desfrutem de um serviço incomparável como padrão, cada voo da Sivitajet tem pelo menos um anfitrião de cabine, bem como dois pilotos na cabine de comando. Os pilotos voam apenas um tipo de aeronave, para garantir familiaridade máxima e reações instintivas a qualquer situação, e treinam duas vezes por ano. A tripulação de cabine da VistaJet Ltd. é treinada pelo British Butler Institute, MedAire, Norland College e Wine & Spirit Education Trust.',
+    diningHeading: 'Jantar privado',
+    diningDesc: 'Nossa equipe de jantar privado gerencia o catering a bordo, oferecendo amplas opções gastronômicas — desde menus exclusivos selecionados por chefs mundialmente renomados para SivitaJets, catering de restaurantes com estrela Michelin e parceiros globais, até um menu personalizado preparado pelo nutricionista interno da sivitaJet ou seu prato favorito.',
+    wineHeading: 'Vinho no céu',
+    wineDesc: 'A busca pela taça de vinho perfeita a 40.000 pés inspirou um programa de vinhos que oferece os melhores vinhos que têm o melhor sabor em altitude. Obtidos de alguns dos vinhedos mais emblemáticos do mundo, todos os passageiros da sivitaJet podem desfrutar de nossos vinhos que aproveitam os efeitos da altitude para ter o melhor desempenho no céu.',
+    adventuresHeading: 'Aventuras no céu',
+    adventuresDesc: 'A SivitaJet oferece o programa de viajantes mais extenso para crianças. Dando vida a experiências extraordinárias que combinam entretenimento único e elementos educacionais, é adaptado à idade e interesses do seu filho para tornar cada jornada memorável.',
+    hero2Title: 'Experimente o extraordinário',
+    hero2Sub: 'Descubra um novo padrão de aviação privada',
+    hero2Btn: 'Explorar mais',
+    footerFleet: 'Frota',
+    footerMembership: 'Assinatura',
+    footerExperience: 'Experiência',
+    footerContact: 'Contato',
+    footerCopyright: '© 2025 Companhia Aérea. Todos os direitos reservados.',
+  },
+};
+
 const languageOptions = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Español' },
@@ -11,6 +206,7 @@ const languageOptions = [
 
 function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMembershipClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const t = experienceTranslations[language] || experienceTranslations.en;
 
   const handleLanguageChange = (langCode) => {
     if (setLanguage) setLanguage(langCode);
@@ -28,9 +224,9 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
               </svg>
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><button onClick={onBack} className="hover:text-blue-600">Home</button></li>
-              <li><button onClick={onFleetClick} className="hover:text-blue-600">Fleet</button></li>
-              <li><span className="cursor-default">Experience</span></li>
+              <li><button onClick={onBack} className="hover:text-blue-600">{t.home}</button></li>
+              <li><button onClick={onFleetClick} className="hover:text-blue-600">{t.fleet}</button></li>
+              <li><span className="cursor-default">{t.experience}</span></li>
             </ul>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -71,9 +267,9 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
             </div>
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-                <li><button onClick={() => { onBack(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Home</button></li>
-                <li><button onClick={() => { onFleetClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">Fleet</button></li>
-                <li><span className="block text-xl cursor-default">Experience</span></li>
+                <li><button onClick={() => { onBack(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.home}</button></li>
+                <li><button onClick={() => { onFleetClick(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.fleet}</button></li>
+                <li><span className="block text-xl cursor-default">{t.experience}</span></li>
               </ul>
               <hr className="my-4" />
               <div>
@@ -94,7 +290,7 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       )}
 
-      {/* ========== BIG IMAGE HERO ========== */}
+      {/* ========== BIG IMAGE HERO (first) ========== */}
       <div className="relative h-[70vh] w-full overflow-hidden">
         <img
           src="richard.jpg"
@@ -104,14 +300,14 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-between items-center text-center px-4 py-12">
           <div className="flex-1 flex flex-col justify-center">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
-              The ultimate cabin experience
+              {t.hero1Title}
             </h1>
             <p className="text-xl md:text-2xl text-white" style={{ fontFamily: "Afacad, sans-serif" }}>
-              Tailored and unparalleled service
+              {t.hero1Sub}
             </p>
           </div>
           <button className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>
-            Enquire Now
+            {t.hero1Btn}
           </button>
         </div>
       </div>
@@ -119,12 +315,10 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
       {/* Main content */}
       <div className="max-w-6xl mx-auto px-4 py-20 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
-          Private jet in-flight services
+          {t.mainHeading}
         </h1>
         <p className="text-lg text-gray-700 mb-10" style={{ fontFamily: "Afacad, sans-serif" }}>
-          sivitaJet redefines private aviation with its exquisite cabin design and world-class in-flight services.
-          Stepping aboard a sivitaJet aircraft is like entering a luxurious home in the sky, where every detail is
-          meticulously crafted to ensure comfort, productivity, and relaxation.
+          {t.mainDesc}
         </p>
 
         {/* Small image */}
@@ -138,25 +332,163 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
 
         {/* Quote paragraph */}
         <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>
-          "At the heart of the service provided by sivitaJet Cabin Hosts is a genuine care for passengers and
-          the passion for service excellence. We want you to feel as comfortable as possible on board —
-          no request is too large or too small."
+          {t.quote}
         </p>
 
-        {/* New heading */}
-        <h1 className="text-3xl md:text-4xl font-bold text-center" style={{ fontFamily: "Apple Garamond, serif" }}>
-          GEMMA ANNE-JONES, CABIN TRAINING & DEVELOPMENT MANAGER
+        {/* Gemma heading */}
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-16" style={{ fontFamily: "Apple Garamond, serif" }}>
+          {t.gemmaHeading}
         </h1>
+      </div>
+
+      {/* ========== A HOME AWAY FROM HOME ========== */}
+      <div className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex-1 p-6 md:p-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+                {t.homeAwayHeading}
+              </h2>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+                {t.homeAwayDesc}
+              </p>
+            </div>
+            <div className="md:w-2/5 p-6 md:p-8">
+              <img
+                src="Whatat.jpeg"
+                alt="Luxury cabin interior"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== THE MOST EXPERIENCED TEAM (image left, text right) ========== */}
+      <div className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/6 p-6 md:p-8">
+              <img
+                src="WhatsAppImageat.jpeg"
+                alt="Experienced team"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+            <div className="flex-1 p-6 md:p-8 text-right">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+                {t.teamHeading}
+              </h2>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+                {t.teamDesc}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== PRIVATE DINING (text left, image right) ========== */}
+      <div className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex-1 p-6 md:p-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+                {t.diningHeading}
+              </h2>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+                {t.diningDesc}
+              </p>
+            </div>
+            <div className="md:w-2/6 p-6 md:p-8">
+              <img
+                src="WhatsApp Image3.jpeg"
+                alt="Private dining"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== WINE IN THE SKY (image left, text right) ========== */}
+      <div className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/6 p-6 md:p-8">
+              <img
+                src="WhatsAppat5.jpeg"
+                alt="Wine tasting"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+            <div className="flex-1 p-6 md:p-8 text-right">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+                {t.wineHeading}
+              </h2>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+                {t.wineDesc}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== ADVENTURES IN THE SKY (text left, image right) ========== */}
+      <div className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex-1 p-6 md:p-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+                {t.adventuresHeading}
+              </h2>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+                {t.adventuresDesc}
+              </p>
+            </div>
+            <div className="md:w-2/6 p-6 md:p-8">
+              <img
+                src="What03.jpeg"
+                alt="Children adventure"
+                className="w-full h-full object-cover"
+                style={{ minHeight: '280px' }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== SECOND BIG IMAGE (full-width with overlay) ========== */}
+      <div className="relative h-[70vh] w-full overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          alt="Luxury aviation"
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-4">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            {t.hero2Title}
+          </h2>
+          <p className="text-xl md:text-2xl text-white mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
+            {t.hero2Sub}
+          </p>
+          <button className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold" style={{ fontFamily: "Afacad, sans-serif" }}>
+            {t.hero2Btn}
+          </button>
+        </div>
       </div>
 
       {/* Footer */}
       <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8 mb-8">
-            <button onClick={onFleetClick} className="hover:underline">Fleet</button>
-            <button onClick={onMembershipClick} className="hover:underline">Membership</button>
-            <span className="cursor-default">Experience</span>
-            <a href="#" className="hover:underline">Contact Us</a>
+            <button onClick={onFleetClick} className="hover:underline">{t.footerFleet}</button>
+            <button onClick={onMembershipClick} className="hover:underline">{t.footerMembership}</button>
+            <span className="cursor-default">{t.footerExperience}</span>
+            <a href="#" className="hover:underline">{t.footerContact}</a>
           </div>
           <div className="flex justify-center gap-50 mb-10">
             <div className="text-center">
@@ -175,7 +507,7 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
             </div>
           </div>
           <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
-            &copy; 2025 Airline. All rights reserved.
+            {t.footerCopyright}
           </div>
         </div>
       </footer>

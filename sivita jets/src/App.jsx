@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
 import Fleet from './Fleet';
@@ -255,6 +255,59 @@ function App() {
   const [showFleet, setShowFleet] = useState(false);
   const [showExperience, setShowExperience] = useState(false);
 
+  // Helper to save current page to localStorage
+  const saveCurrentPage = (page) => {
+    localStorage.setItem('currentPage', page);
+  };
+
+  // Navigation functions (explicitly save page)
+  const goToHome = () => {
+    setShowMembership(false);
+    setShowFleet(false);
+    setShowExperience(false);
+    saveCurrentPage('home');
+  };
+  const goToMembership = () => {
+    setShowMembership(true);
+    setShowFleet(false);
+    setShowExperience(false);
+    saveCurrentPage('membership');
+  };
+  const goToFleet = () => {
+    setShowMembership(false);
+    setShowFleet(true);
+    setShowExperience(false);
+    saveCurrentPage('fleet');
+  };
+  const goToExperience = () => {
+    setShowMembership(false);
+    setShowFleet(false);
+    setShowExperience(true);
+    saveCurrentPage('experience');
+  };
+
+  // Restore last page on initial load
+  useEffect(() => {
+    const lastPage = localStorage.getItem('currentPage');
+    if (lastPage === 'membership') goToMembership();
+    else if (lastPage === 'fleet') goToFleet();
+    else if (lastPage === 'experience') goToExperience();
+    else goToHome();
+  }, []);
+
+  // Also save when page state changes (backup)
+  useEffect(() => {
+    if (showMembership) saveCurrentPage('membership');
+    else if (showFleet) saveCurrentPage('fleet');
+    else if (showExperience) saveCurrentPage('experience');
+    else saveCurrentPage('home');
+  }, [showMembership, showFleet, showExperience]);
+
+  // Language persistence
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
   const languageOptions = [
     { code: 'en', name: 'English' },
     { code: 'es', name: 'Español' },
@@ -283,41 +336,35 @@ function App() {
 
   const t = translations[language] || translations.en;
 
-  // Conditional rendering – UPDATED: Experience now receives onFleetClick and onMembershipClick
-    // Conditional rendering
- if (showExperience) {
-  return <Experience 
-    onBack={() => setShowExperience(false)} 
-    language={language} 
-    setLanguage={setLanguage} 
-    onFleetClick={() => {
-      setShowExperience(false);
-      setShowFleet(true);
-    }}
-    onMembershipClick={() => {
-      setShowExperience(false);
-      setShowMembership(true);
-    }}
-  />;
-}
-  if (showFleet) {
-    return <Fleet 
-      onBack={() => setShowFleet(false)} 
+  // Conditional rendering with navigation functions
+  if (showExperience) {
+    return <Experience 
+      onBack={goToHome}
       language={language} 
       setLanguage={setLanguage} 
-      onExperienceClick={() => setShowExperience(true)} 
+      onFleetClick={goToFleet}
+      onMembershipClick={goToMembership}
+    />;
+  }
+  if (showFleet) {
+    return <Fleet 
+      onBack={goToHome}
+      language={language} 
+      setLanguage={setLanguage} 
+      onExperienceClick={goToExperience}
     />;
   }
   if (showMembership) {
     return <Membership 
-      onBack={() => setShowMembership(false)} 
+      onBack={goToHome}
       language={language} 
       setLanguage={setLanguage} 
-      onFleetClick={() => setShowFleet(true)}
-      onExperienceClick={() => setShowExperience(true)}
+      onFleetClick={goToFleet}
+      onExperienceClick={goToExperience}
     />;
   }
 
+  // Homepage JSX (unchanged except all navigation buttons use goToXxx)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar – sticky */}
@@ -330,9 +377,9 @@ function App() {
               </svg>
             </button>
             <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><button onClick={() => setShowMembership(true)} className="hover:text-blue-600">{t.navMembership}</button></li>
-              <li><button onClick={() => setShowFleet(true)} className="hover:text-blue-600">{t.navFleet}</button></li>
-              <li><button onClick={() => setShowExperience(true)} className="hover:text-blue-600">{t.navExperience}</button></li>
+              <li><button onClick={goToMembership} className="hover:text-blue-600">{t.navMembership}</button></li>
+              <li><button onClick={goToFleet} className="hover:text-blue-600">{t.navFleet}</button></li>
+              <li><button onClick={goToExperience} className="hover:text-blue-600">{t.navExperience}</button></li>
             </ul>
           </div>
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -373,9 +420,9 @@ function App() {
             </div>
             <div className="px-6 py-4">
               <ul className="space-y-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-                <li><button onClick={() => { setShowMembership(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navMembership}</button></li>
-                <li><button onClick={() => { setShowFleet(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>
-                <li><button onClick={() => { setShowExperience(true); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navExperience}</button></li>
+                <li><button onClick={() => { goToMembership(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navMembership}</button></li>
+                <li><button onClick={() => { goToFleet(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navFleet}</button></li>
+                <li><button onClick={() => { goToExperience(); setMenuOpen(false); }} className="block text-xl hover:text-blue-600">{t.navExperience}</button></li>
               </ul>
               <hr className="my-4" />
               <div>
@@ -407,12 +454,12 @@ function App() {
           <p className="text-xl md:text-2xl mb-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>{t.heroSub2}</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button className="px-6 py-3 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroPlanBtn}</button>
-            <button onClick={() => setShowMembership(true)} className="px-6 py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroMemberBtn}</button>
+            <button onClick={goToMembership} className="px-6 py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroMemberBtn}</button>
           </div>
         </div>
       </header>
 
-      {/* FLIGHT SEARCH FORM */}
+      {/* FLIGHT SEARCH FORM (unchanged except any buttons that used setShowXxx now use goToXxx) */}
       <section className="max-w-5xl mx-auto -mt-16 bg-white rounded-xl shadow-xl p-6 relative z-10">
         <h2 className="text-2xl mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.bookFlight}</h2>
         <div className="flex items-center gap-2 mb-4">
@@ -492,7 +539,7 @@ function App() {
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.programTitle}</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.programDesc}</p>
-              <button onClick={() => setShowMembership(true)} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -500,15 +547,15 @@ function App() {
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.vj25Title}</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.vj25Desc}</p>
-              <button onClick={() => setShowMembership(true)} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img src="WhatsApp.jpeg" alt="Corporate" className="w-full h-48 object-cover" />
+            <img src="wesley.jpg" alt="Corporate" className="w-full h-48 object-cover" />
             <div className="p-6">
               <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.corporateTitle}</h3>
               <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.corporateDesc}</p>
-              <button onClick={() => setShowMembership(true)} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
         </div>
@@ -521,7 +568,7 @@ function App() {
             <div className="flex-1 p-6 md:p-8">
               <h2 className="text-4xl md:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>{t.fleetTitle}</h2>
               <p className="text-lg text-gray-700 mt-6 text-left" style={{ fontFamily: "Afacad, sans-serif" }}>{t.fleetDesc}</p>
-              <button onClick={() => setShowFleet(true)} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
+              <button onClick={goToFleet} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
             <div className="flex-1 md:max-w-[40%]">
               <img src="yaroslav.jpg" alt="Aircraft fleet" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
@@ -540,7 +587,7 @@ function App() {
             <div className="flex-1 p-6 md:p-8 text-right">
               <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>{t.globalTitle}</h2>
               <p className="text-lg text-gray-700 mt-6 max-w-3xl ml-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.globalDesc}</p>
-              <button onClick={() => setShowFleet(true)} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
+              <button onClick={goToFleet} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
           </div>
         </div>
@@ -560,9 +607,9 @@ function App() {
       <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8 mb-8">
-            <button onClick={() => setShowFleet(true)} className="hover:underline">{t.footerFleet}</button>
-            <button onClick={() => setShowMembership(true)} className="hover:underline">{t.footerMembership}</button>
-            <button onClick={() => setShowExperience(true)} className="hover:underline">{t.footerExperience}</button>
+            <button onClick={goToFleet} className="hover:underline">{t.footerFleet}</button>
+            <button onClick={goToMembership} className="hover:underline">{t.footerMembership}</button>
+            <button onClick={goToExperience} className="hover:underline">{t.footerExperience}</button>
             <a href="#" className="hover:underline">{t.footerContact}</a>
           </div>
           <div className="flex justify-center gap-50 mb-10">
