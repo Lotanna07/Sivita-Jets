@@ -4,7 +4,7 @@ import Membership from './Membership';
 import Fleet from './Fleet';
 import Experience from './Experience';
 
-// ---------- TRANSLATIONS ----------
+// ---------- TRANSLATIONS (fully preserved from your original) ----------
 const translations = {
   en: {
     navMembership: 'Membership',
@@ -254,13 +254,13 @@ function App() {
   const [showMembership, setShowMembership] = useState(false);
   const [showFleet, setShowFleet] = useState(false);
   const [showExperience, setShowExperience] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
 
   // Helper to save current page to localStorage
   const saveCurrentPage = (page) => {
     localStorage.setItem('currentPage', page);
   };
 
-  // Navigation functions (explicitly save page)
   const goToHome = () => {
     setShowMembership(false);
     setShowFleet(false);
@@ -286,7 +286,6 @@ function App() {
     saveCurrentPage('experience');
   };
 
-  // Restore last page on initial load
   useEffect(() => {
     const lastPage = localStorage.getItem('currentPage');
     if (lastPage === 'membership') goToMembership();
@@ -295,7 +294,6 @@ function App() {
     else goToHome();
   }, []);
 
-  // Also save when page state changes (backup)
   useEffect(() => {
     if (showMembership) saveCurrentPage('membership');
     else if (showFleet) saveCurrentPage('fleet');
@@ -303,10 +301,20 @@ function App() {
     else saveCurrentPage('home');
   }, [showMembership, showFleet, showExperience]);
 
-  // Language persistence
   useEffect(() => {
     localStorage.setItem('language', language);
   }, [language]);
+
+  // Click outside handler for language menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langMenuOpen && !event.target.closest('.language-dropdown')) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [langMenuOpen]);
 
   const languageOptions = [
     { code: 'en', name: 'English' },
@@ -336,7 +344,6 @@ function App() {
 
   const t = translations[language] || translations.en;
 
-  // Conditional rendering with navigation functions
   if (showExperience) {
     return <Experience 
       onBack={goToHome}
@@ -364,49 +371,63 @@ function App() {
     />;
   }
 
-  // Homepage JSX (unchanged except all navigation buttons use goToXxx)
+  // Responsive homepage JSX
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar – sticky */}
-      <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 md:px-12">
+      <nav className="sticky top-0 z-50 bg-white shadow-md py-3 sm:py-4 px-4 sm:px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button onClick={() => setMenuOpen(true)} className="p-2 rounded-md hover:bg-gray-100 focus:outline-none" aria-label="Menu">
-              <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><button onClick={goToMembership} className="hover:text-blue-600">{t.navMembership}</button></li>
-              <li><button onClick={goToFleet} className="hover:text-blue-600">{t.navFleet}</button></li>
-              <li><button onClick={goToExperience} className="hover:text-blue-600">{t.navExperience}</button></li>
+            <ul className="hidden md:flex gap-4 lg:gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
+              <li><button onClick={goToMembership} className="hover:text-blue-600 text-sm lg:text-base">{t.navMembership}</button></li>
+              <li><button onClick={goToFleet} className="hover:text-blue-600 text-sm lg:text-base">{t.navFleet}</button></li>
+              <li><button onClick={goToExperience} className="hover:text-blue-600 text-sm lg:text-base">{t.navExperience}</button></li>
             </ul>
           </div>
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <img src="logo.png" alt="Airline Logo" className="h-20 w-auto" />
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-28 sm:w-32 md:w-auto">
+            <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative group">
-              <button className="p-2 rounded-md hover:bg-gray-100 focus:outline-none">
-                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Language dropdown – now clickable instead of hover */}
+            <div className="relative language-dropdown">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="p-1 sm:p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </button>
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
-                <div className="py-1">
-                  {languageOptions.map((lang) => (
-                    <button key={lang.code} onClick={() => setLanguage(lang.code)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style={{ fontFamily: "Afacad, sans-serif" }}>{lang.name}</button>
-                  ))}
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg z-20">
+                  <div className="py-1">
+                    {languageOptions.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          setLangMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                        style={{ fontFamily: "Afacad, sans-serif" }}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-            <button className="px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
-            <button className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
@@ -435,192 +456,185 @@ function App() {
               </div>
               <hr className="my-4" />
               <div className="space-y-3">
-                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }} onClick={() => setMenuOpen(false)}>Log in</button>
-                <button className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }} onClick={() => setMenuOpen(false)}>Sign Up</button>
+                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
+                <button className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* HERO SECTION WITH VIDEO + TWO BUTTONS */}
-      <header className="relative h-[70vh] overflow-hidden">
+      <header className="relative h-[60vh] sm:min-h-[70vh] overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute top-0 left-0 w-full h-full object-cover" poster="https://placehold.co/1920x1080">
           <source src="airline.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.heroTitle}</h1>
-          <p className="text-xl md:text-2xl" style={{ fontFamily: "Apple Garamond, sans-serif" }}>{t.heroSub1}</p>
-          <p className="text-xl md:text-2xl mb-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>{t.heroSub2}</p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-6 py-3 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroPlanBtn}</button>
-            <button onClick={goToMembership} className="px-6 py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroMemberBtn}</button>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-2 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.heroTitle}</h1>
+          <p className="text-base sm:text-xl md:text-2xl" style={{ fontFamily: "Apple Garamond, sans-serif" }}>{t.heroSub1}</p>
+          <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>{t.heroSub2}</p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <button className="px-4 sm:px-6 py-2 sm:py-3 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition text-sm sm:text-base lg:text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroPlanBtn}</button>
+            <button onClick={goToMembership} className="px-4 sm:px-6 py-2 sm:py-3 rounded-md border-2 border-white text-white font-semibold hover:bg-white hover:text-blue-600 transition text-sm sm:text-base lg:text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>{t.heroMemberBtn}</button>
           </div>
         </div>
       </header>
 
-      {/* FLIGHT SEARCH FORM (unchanged except any buttons that used setShowXxx now use goToXxx) */}
-      <section className="max-w-5xl mx-auto -mt-16 bg-white rounded-xl shadow-xl p-6 relative z-10">
-        <h2 className="text-2xl mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.bookFlight}</h2>
-        <div className="flex items-center gap-2 mb-4">
+      <section className="max-w-5xl mx-auto -mt-12 sm:-mt-16 bg-white rounded-xl shadow-xl p-4 sm:p-6 relative z-10">
+        <h2 className="text-xl sm:text-2xl mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.bookFlight}</h2>
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
           <input type="checkbox" id="roundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="w-4 h-4 text-blue-600" />
-          <label htmlFor="roundTrip" className="text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.roundTrip}</label>
+          <label htmlFor="roundTrip" className="text-xs sm:text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.roundTrip}</label>
         </div>
         {!isRoundTrip ? (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div className="border p-2 rounded bg-white flex items-center gap-2">
-              <RiFlightTakeoffLine className="w-5 h-5 text-gray-500" />
-              <select value={fromCountry} onChange={(e) => setFromCountry(e.target.value)} className="w-full bg-transparent focus:outline-none" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <RiFlightTakeoffLine className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+              <select value={fromCountry} onChange={(e) => setFromCountry(e.target.value)} className="w-full bg-transparent focus:outline-none text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
                 <option value="">{t.from}</option>
                 {countries.map((country) => (<option key={country} value={country}>{country}</option>))}
               </select>
             </div>
             <div className="border p-2 rounded bg-white flex items-center gap-2">
-              <RiFlightLandLine className="w-5 h-5 text-gray-500" />
-              <select value={toCountry} onChange={(e) => setToCountry(e.target.value)} className="w-full bg-transparent focus:outline-none" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <RiFlightLandLine className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+              <select value={toCountry} onChange={(e) => setToCountry(e.target.value)} className="w-full bg-transparent focus:outline-none text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
                 <option value="">{t.to}</option>
                 {countries.map((country) => (<option key={country} value={country}>{country}</option>))}
               </select>
             </div>
-            <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} className="border p-2 rounded" />
+            <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} className="border p-2 rounded text-sm sm:text-base" />
             <div className="border p-2 rounded bg-white flex items-center justify-between gap-2">
-              <span className="text-sm text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>{t.passengers}</span>
-              <div className="flex items-center gap-2">
-                <button onClick={decreasePassengers} className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers <= 1}>-</button>
-                <span className="text-lg font-semibold w-8 text-center">{passengers}</span>
-                <button onClick={increasePassengers} className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers >= 14}>+</button>
+              <span className="text-xs sm:text-sm text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>{t.passengers}</span>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <button onClick={decreasePassengers} className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-base sm:text-xl font-bold" disabled={passengers <= 1}>-</button>
+                <span className="text-base sm:text-lg font-semibold w-6 sm:w-8 text-center">{passengers}</span>
+                <button onClick={increasePassengers} className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-base sm:text-xl font-bold" disabled={passengers >= 14}>+</button>
               </div>
               <span className="text-xs text-gray-500">{t.max14}</span>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div className="border p-2 rounded bg-white flex items-center gap-2">
-              <RiFlightTakeoffLine className="w-5 h-5 text-gray-500" />
-              <select value={fromCountry} onChange={(e) => setFromCountry(e.target.value)} className="w-full bg-transparent focus:outline-none" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <RiFlightTakeoffLine className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+              <select value={fromCountry} onChange={(e) => setFromCountry(e.target.value)} className="w-full bg-transparent focus:outline-none text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
                 <option value="">{t.from}</option>
                 {countries.map((country) => (<option key={country} value={country}>{country}</option>))}
               </select>
             </div>
             <div className="border p-2 rounded bg-white flex items-center gap-2">
-              <RiFlightLandLine className="w-5 h-5 text-gray-500" />
-              <select value={toCountry} onChange={(e) => setToCountry(e.target.value)} className="w-full bg-transparent focus:outline-none" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <RiFlightLandLine className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+              <select value={toCountry} onChange={(e) => setToCountry(e.target.value)} className="w-full bg-transparent focus:outline-none text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
                 <option value="">{t.to}</option>
                 {countries.map((country) => (<option key={country} value={country}>{country}</option>))}
               </select>
             </div>
-            <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} className="border p-2 rounded" />
-            <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} className="border p-2 rounded" />
+            <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} className="border p-2 rounded text-sm sm:text-base" />
+            <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} className="border p-2 rounded text-sm sm:text-base" />
           </div>
         )}
         <div className="mt-4">
           {isRoundTrip && (
-            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="border p-2 rounded bg-white flex items-center gap-3 w-full sm:w-auto">
-                <span className="text-sm text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>{t.passengers}</span>
-                <button onClick={decreasePassengers} className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers <= 1}>-</button>
-                <span className="text-lg font-semibold w-8 text-center">{passengers}</span>
-                <button onClick={increasePassengers} className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers >= 14}>+</button>
+            <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <div className="border p-2 rounded bg-white flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                <span className="text-xs sm:text-sm text-gray-600" style={{ fontFamily: "Afacad, sans-serif" }}>{t.passengers}</span>
+                <button onClick={decreasePassengers} className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers <= 1}>-</button>
+                <span className="text-base sm:text-lg font-semibold w-6 sm:w-8 text-center">{passengers}</span>
+                <button onClick={increasePassengers} className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold" disabled={passengers >= 14}>+</button>
                 <span className="text-xs text-gray-500">{t.max14}</span>
               </div>
             </div>
           )}
-          <button className="w-full md:w-auto bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition">{t.search}</button>
+          <button className="w-full sm:w-auto bg-blue-600 text-white py-2 px-4 sm:px-6 rounded hover:bg-blue-700 transition text-sm sm:text-base">{t.search}</button>
         </div>
       </section>
 
-      {/* MEMBERSHIP SECTION */}
-      <div className="max-w-6xl mx-auto mt-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>{t.membershipTitle}</h2>
-        <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>{t.membershipDesc}</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto mt-12 sm:mt-16 px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center" style={{ fontFamily: "Apple Garamond, serif" }}>{t.membershipTitle}</h2>
+        <p className="text-base sm:text-lg text-gray-700 text-center max-w-4xl mx-auto mb-10 sm:mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>{t.membershipDesc}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img src="timothy.jpg" alt="Program" className="w-full h-48 object-cover" />
-            <div className="p-6">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.programTitle}</h3>
-              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.programDesc}</p>
-              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+            <img src="timothy.jpg" alt="Program" className="w-full h-40 sm:h-48 object-cover" />
+            <div className="p-4 sm:p-6">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.programTitle}</h3>
+              <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.programDesc}</p>
+              <button onClick={goToMembership} className="inline-block px-4 sm:px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img src="unsplash.jpg" alt="VJ25" className="w-full h-48 object-cover" />
-            <div className="p-6">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.vj25Title}</h3>
-              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.vj25Desc}</p>
-              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+            <img src="unsplash.jpg" alt="VJ25" className="w-full h-40 sm:h-48 object-cover" />
+            <div className="p-4 sm:p-6">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.vj25Title}</h3>
+              <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.vj25Desc}</p>
+              <button onClick={goToMembership} className="inline-block px-4 sm:px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <img src="wesley.jpg" alt="Corporate" className="w-full h-48 object-cover" />
-            <div className="p-6">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.corporateTitle}</h3>
-              <p className="text-gray-600 mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>{t.corporateDesc}</p>
-              <button onClick={goToMembership} className="inline-block px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
+            <img src="wesley.jpg" alt="Corporate" className="w-full h-40 sm:h-48 object-cover" />
+            <div className="p-4 sm:p-6">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{ fontFamily: "Apple Garamond, serif" }}>{t.corporateTitle}</h3>
+              <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.corporateDesc}</p>
+              <button onClick={goToMembership} className="inline-block px-4 sm:px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.viewMembership}</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* A GLOBAL JET FLEET CARD */}
-      <div className="max-w-6xl mx-auto mt-20 px-4">
+      <div className="max-w-7xl mx-auto mt-16 sm:mt-20 px-4 sm:px-6">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-4xl md:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>{t.fleetTitle}</h2>
-              <p className="text-lg text-gray-700 mt-6 text-left" style={{ fontFamily: "Afacad, sans-serif" }}>{t.fleetDesc}</p>
-              <button onClick={goToFleet} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-left" style={{ fontFamily: "Apple Garamond, serif" }}>{t.fleetTitle}</h2>
+              <p className="text-sm sm:text-base lg:text-lg text-gray-700 mt-4 sm:mt-6 text-left" style={{ fontFamily: "Afacad, sans-serif" }}>{t.fleetDesc}</p>
+              <button onClick={goToFleet} className="inline-block mt-5 sm:mt-6 px-4 sm:px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
             <div className="flex-1 md:max-w-[40%]">
-              <img src="yaroslav.jpg" alt="Aircraft fleet" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="yaroslav.jpg" alt="Aircraft fleet" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* THE GLOBAL 7500 CARD */}
-      <div className="max-w-6xl mx-auto mt-20 px-4">
+      <div className="max-w-7xl mx-auto mt-16 sm:mt-20 px-4 sm:px-6">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-2/5">
-              <img src="simon.jpg" alt="Global 7500" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="simon.jpg" alt="Global 7500" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
-            <div className="flex-1 p-6 md:p-8 text-right">
-              <h2 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>{t.globalTitle}</h2>
-              <p className="text-lg text-gray-700 mt-6 max-w-3xl ml-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.globalDesc}</p>
-              <button onClick={goToFleet} className="inline-block mt-6 px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
+            <div className="flex-1 p-5 sm:p-8 text-center md:text-right">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>{t.globalTitle}</h2>
+              <p className="text-sm sm:text-base lg:text-lg text-gray-700 mt-4 sm:mt-6 max-w-3xl md:ml-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.globalDesc}</p>
+              <button onClick={goToFleet} className="inline-block mt-5 sm:mt-6 px-4 sm:px-5 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.exploreFleet}</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* OUR PROMISE SECTION */}
-      <div className="relative w-full mt-20">
-        <img src="chris.jpg" alt="Our Promise" className="w-full h-auto md:h-[500px] object-cover" />
-        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.promiseTitle}</h2>
-          <p className="text-white text-base md:text-lg max-w-3xl mx-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.promiseDesc}</p>
-          <button className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>{t.makeEnquiry}</button>
+      <div className="relative w-full mt-16 sm:mt-20">
+        <img src="chris.jpg" alt="Our Promise" className="w-full h-64 sm:h-[400px] md:h-[500px] object-cover" />
+        <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center px-3 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>{t.promiseTitle}</h2>
+          <p className="text-white text-xs sm:text-sm md:text-base lg:text-lg max-w-3xl mx-auto" style={{ fontFamily: "Afacad, sans-serif" }}>{t.promiseDesc}</p>
+          <button className="mt-4 sm:mt-6 px-4 sm:px-6 py-1.5 sm:py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.makeEnquiry}</button>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex justify-center gap-8 mb-8">
-            <button onClick={goToFleet} className="hover:underline">{t.footerFleet}</button>
-            <button onClick={goToMembership} className="hover:underline">{t.footerMembership}</button>
-            <button onClick={goToExperience} className="hover:underline">{t.footerExperience}</button>
-            <a href="#" className="hover:underline">{t.footerContact}</a>
+      <footer className="bg-blue-700 text-white mt-12 sm:mt-16 py-6 sm:py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <button onClick={goToFleet} className="hover:underline text-sm sm:text-base">{t.footerFleet}</button>
+            <button onClick={goToMembership} className="hover:underline text-sm sm:text-base">{t.footerMembership}</button>
+            <button onClick={goToExperience} className="hover:underline text-sm sm:text-base">{t.footerExperience}</button>
+            <a href="#" className="hover:underline text-sm sm:text-base">{t.footerContact}</a>
           </div>
-          <div className="flex justify-center gap-50 mb-10">
-            <div className="text-center">
+          <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16 mb-8 sm:mb-10">
+            <div className="text-center sm:text-left space-y-1">
               <div>Gulfstream</div>
               <div>Dassault</div>
               <div>Cessna</div>
               <div>Bombardier</div>
               <div>Embraer</div>
             </div>
-            <div className="text-center">
+            <div className="text-center sm:text-right space-y-1">
               <div>+645737383466</div>
               <div>+987654345679</div>
               <div>&nbsp;</div>
@@ -628,7 +642,7 @@ function App() {
               <div>&nbsp;</div>
             </div>
           </div>
-          <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
+          <div className="text-center text-xs sm:text-sm mt-6 sm:mt-8 pt-4 border-t border-blue-500">
             {t.footerCopyright}
           </div>
         </div>

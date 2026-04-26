@@ -1,42 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const experienceTranslations = {
   en: {
-    // Navbar
     home: 'Home',
     fleet: 'Fleet',
     experience: 'Experience',
-    // Hero 1 (big image)
     hero1Title: 'The ultimate cabin experience',
     hero1Sub: 'Tailored and unparalleled service',
     hero1Btn: 'Enquire Now',
-    // Main section
     mainHeading: 'Private jet in-flight services',
     mainDesc: 'sivitaJet redefines private aviation with its exquisite cabin design and world-class in-flight services. Stepping aboard a sivitaJet aircraft is like entering a luxurious home in the sky, where every detail is meticulously crafted to ensure comfort, productivity, and relaxation.',
-    // Quote
     quote: '"At the heart of the service provided by sivitaJet Cabin Hosts is a genuine care for passengers and the passion for service excellence. We want you to feel as comfortable as possible on board — no request is too large or too small."',
-    // Gemma heading
     gemmaHeading: 'GEMMA ANNE-JONES, CABIN TRAINING & DEVELOPMENT MANAGER',
-    // A home away from home
     homeAwayHeading: 'A home away from home',
     homeAwayDesc: 'Sivitajets cabin design, consistent across the whole fleet, welcomes travelers all over the world. Passengers can use a fully enabled business suite or relax in a restful family space. The cabins are equipped for all needs.',
-    // The most experienced team
     teamHeading: 'The most experienced team',
     teamDesc: 'To ensure passengers enjoy unrivaled service as standard, every Sivitajet flight has at least one Cabin Host as well as two pilots in the flight deck. Pilots only fly one aircraft type, to ensure maximum familiarity and instinctive reactions to any situation, and train twice a year. VistaJet Ltd. Cabin Crew are trained by the British Butler Institute, MedAire, Norland College and Wine & Spirit Education Trust.',
-    // Private Dining
     diningHeading: 'Private Dining',
     diningDesc: 'Our Private Dining team manages our on-board catering, providing you with extensive dining options — from exclusive menus curated by world renowned chefs for SivitaJets, catering from Michelin star and partner restaurants globally, to a personalized menu prepared by sivitaJet’s in-house nutritionist or your favorite dish.',
-    // Wine in the sky
     wineHeading: 'Wine in the sky',
     wineDesc: 'A search for the perfect glass of wine at 40,000 feet inspired a Wine Program that offers the finest wines that taste the best at altitude. Sourced from some of the world’s most iconic vineyards, all sivitaJet passengers can enjoy our wines that take advantage of the effects of altitude to perform best in the sky.',
-    // Adventures in the sky
     adventuresHeading: 'Adventures in the sky',
     adventuresDesc: 'SivitaJet offers the most extensive travelers\' program for children. Bringing to life extraordinary experiences that combine unique entertainment and educational elements, it is tailored to your child\'s age and interests to make every journey memorable.',
-    // Hero 2 (second big image)
     hero2Title: 'Experience the Extraordinary',
     hero2Sub: 'Discover a new standard of private aviation',
     hero2Btn: 'Explore More',
-    // Footer
     footerFleet: 'Fleet',
     footerMembership: 'Membership',
     footerExperience: 'Experience',
@@ -206,54 +194,80 @@ const languageOptions = [
 
 function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMembershipClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
   const t = experienceTranslations[language] || experienceTranslations.en;
+
+  // Click outside handler for language menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langMenuOpen && !event.target.closest('.language-dropdown')) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [langMenuOpen]);
 
   const handleLanguageChange = (langCode) => {
     if (setLanguage) setLanguage(langCode);
+    setLangMenuOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 md:px-12">
+      {/* ========== RESPONSIVE NAVBAR ========== */}
+      <nav className="sticky top-0 z-50 bg-white shadow-md py-3 sm:py-4 px-4 sm:px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button onClick={() => setMenuOpen(true)} className="p-2 rounded-md hover:bg-gray-100 focus:outline-none" aria-label="Menu">
-              <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><button onClick={onBack} className="hover:text-blue-600">{t.home}</button></li>
-              <li><button onClick={onFleetClick} className="hover:text-blue-600">{t.fleet}</button></li>
-              <li><span className="cursor-default">{t.experience}</span></li>
+            <ul className="hidden md:flex gap-4 lg:gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
+              <li><button onClick={onBack} className="hover:text-blue-600 text-sm lg:text-base">{t.home}</button></li>
+              <li><button onClick={onFleetClick} className="hover:text-blue-600 text-sm lg:text-base">{t.fleet}</button></li>
+              <li><span className="cursor-default text-sm lg:text-base">{t.experience}</span></li>
             </ul>
           </div>
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <img src="logo.png" alt="Airline Logo" className="h-20 w-auto" />
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-28 sm:w-32 md:w-auto">
+            <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative group">
-              <button className="p-2 rounded-md hover:bg-gray-100 focus:outline-none">
-                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Language dropdown – now clickable instead of hover */}
+            <div className="relative language-dropdown">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="p-1 sm:p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </button>
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
-                <div className="py-1">
-                  {languageOptions.map((lang) => (
-                    <button key={lang.code} onClick={() => handleLanguageChange(lang.code)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style={{ fontFamily: "Afacad, sans-serif" }}>{lang.name}</button>
-                  ))}
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg z-20">
+                  <div className="py-1">
+                    {languageOptions.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className="block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                        style={{ fontFamily: "Afacad, sans-serif" }}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-            <button className="px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
-            <button className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
+      {/* ========== MOBILE DRAWER ========== */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
@@ -290,98 +304,81 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       )}
 
-      {/* ========== BIG IMAGE HERO (first) ========== */}
-      <div className="relative h-[70vh] w-full overflow-hidden">
+      {/* ========== BIG IMAGE HERO (first) – responsive ========== */}
+      <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
         <img
           src="richard.jpg"
           alt="Luxury flight experience"
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 flex flex-col justify-between items-center text-center px-4 py-12">
+        <div className="absolute inset-0 bg-black/40 flex flex-col justify-between items-center text-center px-4 py-8 sm:py-12">
           <div className="flex-1 flex flex-col justify-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
               {t.hero1Title}
             </h1>
-            <p className="text-xl md:text-2xl text-white" style={{ fontFamily: "Afacad, sans-serif" }}>
+            <p className="text-sm sm:text-xl md:text-2xl text-white" style={{ fontFamily: "Afacad, sans-serif" }}>
               {t.hero1Sub}
             </p>
           </div>
-          <button className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>
+          <button className="w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold text-sm sm:text-base lg:text-lg" style={{ fontFamily: "Afacad, sans-serif" }}>
             {t.hero1Btn}
           </button>
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
+      {/* ========== MAIN CONTENT (responsive) ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.mainHeading}
         </h1>
-        <p className="text-lg text-gray-700 mb-10" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-6 sm:mb-10" style={{ fontFamily: "Afacad, sans-serif" }}>
           {t.mainDesc}
         </p>
 
-        {/* Small image */}
-        <div className="flex justify-center mb-8">
-          <img
-            src="WhatsApp2.jpeg"
-            alt="Private jet interior"
-            className="w-64 rounded-lg shadow-md object-cover mx-auto"
-          />
+        <div className="flex justify-center mb-6 sm:mb-8">
+          <img src="WhatsApp2.jpeg" alt="Private jet interior" className="w-48 sm:w-56 md:w-64 rounded-lg shadow-md object-cover mx-auto" />
         </div>
 
-        {/* Quote paragraph */}
-        <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-3xl mx-auto mb-8 sm:mb-12" style={{ fontFamily: "Afacad, sans-serif" }}>
           {t.quote}
         </p>
 
-        {/* Gemma heading */}
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-16" style={{ fontFamily: "Apple Garamond, serif" }}>
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-10 sm:mb-16" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.gemmaHeading}
         </h1>
       </div>
 
       {/* ========== A HOME AWAY FROM HOME ========== */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.homeAwayHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.homeAwayDesc}
               </p>
             </div>
-            <div className="md:w-2/5 p-6 md:p-8">
-              <img
-                src="Whatat.jpeg"
-                alt="Luxury cabin interior"
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="md:w-2/5">
+              <img src="Whatat.jpeg" alt="Luxury cabin interior" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* ========== THE MOST EXPERIENCED TEAM (image left, text right) ========== */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== THE MOST EXPERIENCED TEAM ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="md:w-2/6 p-6 md:p-8">
-              <img
-                src="WhatsAppImageat.jpeg"
-                alt="Experienced team"
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="md:w-2/5">
+              <img src="WhatsAppImageat.jpeg" alt="Experienced team" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
-            <div className="flex-1 p-6 md:p-8 text-right">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8 text-center md:text-right">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.teamHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.teamDesc}
               </p>
             </div>
@@ -389,47 +386,37 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       </div>
 
-      {/* ========== PRIVATE DINING (text left, image right) ========== */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== PRIVATE DINING ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.diningHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.diningDesc}
               </p>
             </div>
-            <div className="md:w-2/6 p-6 md:p-8">
-              <img
-                src="WhatsApp Image3.jpeg"
-                alt="Private dining"
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="md:w-2/5">
+              <img src="WhatsApp Image3.jpeg" alt="Private dining" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* ========== WINE IN THE SKY (image left, text right) ========== */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== WINE IN THE SKY ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="md:w-2/6 p-6 md:p-8">
-              <img
-                src="WhatsAppat5.jpeg"
-                alt="Wine tasting"
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="md:w-2/5">
+              <img src="WhatsAppat5.jpeg" alt="Wine tasting" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
-            <div className="flex-1 p-6 md:p-8 text-right">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8 text-center md:text-right">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.wineHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.wineDesc}
               </p>
             </div>
@@ -437,68 +424,59 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       </div>
 
-      {/* ========== ADVENTURES IN THE SKY (text left, image right) ========== */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== ADVENTURES IN THE SKY ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.adventuresHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.adventuresDesc}
               </p>
             </div>
-            <div className="md:w-2/6 p-6 md:p-8">
-              <img
-                src="What03.jpeg"
-                alt="Children adventure"
-                className="w-full h-full object-cover"
-                style={{ minHeight: '280px' }}
-              />
+            <div className="md:w-2/5">
+              <img src="What03.jpeg" alt="Children adventure" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* ========== SECOND BIG IMAGE (full-width with overlay) ========== */}
-      <div className="relative h-[70vh] w-full overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-          alt="Luxury aviation"
-          className="absolute top-0 left-0 w-full h-full object-cover"
-        />
+      {/* ========== SECOND BIG IMAGE ========== */}
+      <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Luxury aviation" className="absolute top-0 left-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center px-4">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
             {t.hero2Title}
           </h2>
-          <p className="text-xl md:text-2xl text-white mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
+          <p className="text-sm sm:text-xl md:text-2xl text-white mb-4 sm:mb-6" style={{ fontFamily: "Afacad, sans-serif" }}>
             {t.hero2Sub}
           </p>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold" style={{ fontFamily: "Afacad, sans-serif" }}>
+          <button className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-semibold text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
             {t.hero2Btn}
           </button>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex justify-center gap-8 mb-8">
-            <button onClick={onFleetClick} className="hover:underline">{t.footerFleet}</button>
-            <button onClick={onMembershipClick} className="hover:underline">{t.footerMembership}</button>
-            <span className="cursor-default">{t.footerExperience}</span>
-            <a href="#" className="hover:underline">{t.footerContact}</a>
+      {/* ========== RESPONSIVE FOOTER ========== */}
+      <footer className="bg-blue-700 text-white mt-12 sm:mt-16 py-6 sm:py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <button onClick={onFleetClick} className="hover:underline text-sm sm:text-base">{t.footerFleet}</button>
+            <button onClick={onMembershipClick} className="hover:underline text-sm sm:text-base">{t.footerMembership}</button>
+            <span className="cursor-default text-sm sm:text-base">{t.footerExperience}</span>
+            <a href="#" className="hover:underline text-sm sm:text-base">{t.footerContact}</a>
           </div>
-          <div className="flex justify-center gap-50 mb-10">
-            <div className="text-center">
+          <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16 mb-8 sm:mb-10">
+            <div className="text-center sm:text-left space-y-1">
               <div>Gulfstream</div>
               <div>Dassault</div>
               <div>Cessna</div>
               <div>Bombardier</div>
               <div>Embraer</div>
             </div>
-            <div className="text-center">
+            <div className="text-center sm:text-right space-y-1">
               <div>+645737383466</div>
               <div>+987654345679</div>
               <div>&nbsp;</div>
@@ -506,7 +484,7 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
               <div>&nbsp;</div>
             </div>
           </div>
-          <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
+          <div className="text-center text-xs sm:text-sm mt-6 sm:mt-8 pt-4 border-t border-blue-500">
             {t.footerCopyright}
           </div>
         </div>

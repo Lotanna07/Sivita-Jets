@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const fleetTranslations = {
   en: {
@@ -194,6 +194,7 @@ const languageOptions = [
 
 function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -209,8 +210,20 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
 
   const t = fleetTranslations[language] || fleetTranslations.en;
 
+  // Click outside handler for language menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langMenuOpen && !event.target.closest('.language-dropdown')) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [langMenuOpen]);
+
   const handleLanguageChange = (langCode) => {
     if (setLanguage) setLanguage(langCode);
+    setLangMenuOpen(false);
   };
 
   const handleInputChange = (e) => {
@@ -234,46 +247,59 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 md:px-12">
+      {/* ========== RESPONSIVE NAVBAR ========== */}
+      <nav className="sticky top-0 z-50 bg-white shadow-md py-3 sm:py-4 px-4 sm:px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button onClick={() => setMenuOpen(true)} className="p-2 rounded-md hover:bg-gray-100 focus:outline-none" aria-label="Menu">
-              <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <ul className="flex gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
-              <li><button onClick={onBack} className="hover:text-blue-600">Home</button></li>
-              <li><span className="cursor-default">Fleet</span></li>
-              <li><button onClick={onExperienceClick} className="hover:text-blue-600">Experience</button></li>
+            <ul className="hidden md:flex gap-4 lg:gap-6" style={{ fontFamily: "Apple Garamond, sans-serif" }}>
+              <li><button onClick={onBack} className="hover:text-blue-600 text-sm lg:text-base">Home</button></li>
+              <li><span className="cursor-default text-sm lg:text-base">Fleet</span></li>
+              <li><button onClick={onExperienceClick} className="hover:text-blue-600 text-sm lg:text-base">Experience</button></li>
             </ul>
           </div>
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <img src="logo.png" alt="Airline Logo" className="h-20 w-auto" />
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-28 sm:w-32 md:w-auto">
+            <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative group">
-              <button className="p-2 rounded-md hover:bg-gray-100 focus:outline-none">
-                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Language dropdown – now clickable instead of hover */}
+            <div className="relative language-dropdown">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="p-1 sm:p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </button>
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
-                <div className="py-1">
-                  {languageOptions.map((lang) => (
-                    <button key={lang.code} onClick={() => handleLanguageChange(lang.code)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style={{ fontFamily: "Afacad, sans-serif" }}>{lang.name}</button>
-                  ))}
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg z-20">
+                  <div className="py-1">
+                    {languageOptions.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className="block w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                        style={{ fontFamily: "Afacad, sans-serif" }}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-            <button className="px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
-            <button className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
+      {/* ========== MOBILE DRAWER ========== */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
@@ -310,44 +336,44 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
         </div>
       )}
 
-      {/* Main content – heading */}
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>
+      {/* ========== HERO HEADING (responsive) ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.heroTitle}
         </h1>
       </div>
 
-      {/* Bombardier */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== BOMBARDIER CARD ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.bombardierHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.bombardierDesc}
               </p>
             </div>
             <div className="md:w-2/5">
-              <img src="Image1.jpeg" alt="Bombardier" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="Image1.jpeg" alt="Bombardier" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Gulfstream */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== GULFSTREAM CARD ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-2/5">
-              <img src="Image2.jpeg" alt="Gulfstream" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="Image2.jpeg" alt="Gulfstream" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
-            <div className="flex-1 p-6 md:p-8 text-right">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8 text-center md:text-right">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.gulfstreamHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.gulfstreamDesc}
               </p>
             </div>
@@ -355,37 +381,37 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
         </div>
       </div>
 
-      {/* Embraer */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== EMBRAER CARD ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.embraerHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.embraerDesc}
               </p>
             </div>
             <div className="md:w-2/5">
-              <img src="Image33.jpeg" alt="Embraer" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="Image33.jpeg" alt="Embraer" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Cessna */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== CESSNA CARD ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
             <div className="md:w-2/5">
-              <img src="Image44.jpeg" alt="Cessna" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="Image44.jpeg" alt="Cessna" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
-            <div className="flex-1 p-6 md:p-8 text-right">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8 text-center md:text-right">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.cessnaHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.cessnaDesc}
               </p>
             </div>
@@ -393,118 +419,118 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
         </div>
       </div>
 
-      {/* Dassault */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
+      {/* ========== DASSAULT CARD ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-6 md:p-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
+            <div className="flex-1 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style={{ fontFamily: "Apple Garamond, serif" }}>
                 {t.dassaultHeading}
               </h2>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed" style={{ fontFamily: "Afacad, sans-serif" }}>
                 {t.dassaultDesc}
               </p>
             </div>
             <div className="md:w-2/5">
-              <img src="Image55.jpeg" alt="Dassault" className="w-full h-full object-cover" style={{ minHeight: '280px' }} />
+              <img src="Image55.jpeg" alt="Dassault" className="w-full h-64 sm:h-80 md:h-full object-cover" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enquire Section */}
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
+      {/* ========== ENQUIRE SECTION ========== */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.enquireHeading}
         </h1>
-        <img src="logo.png" alt="Logo" className="mx-auto w-48 md:w-64 h-auto" />
+        <img src="logo.png" alt="Logo" className="mx-auto w-32 sm:w-48 md:w-64 h-auto" />
       </div>
 
-      {/* Contact Form */}
-      <div className="max-w-4xl mx-auto mt-20 px-4 pb-20">
-        <div className="bg-white rounded-xl shadow-md p-6 md:p-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
+      {/* ========== CONTACT FORM (responsive) ========== */}
+      <div className="max-w-4xl mx-auto mt-12 sm:mt-20 px-4 pb-20">
+        <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
             {t.formTitle}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.firstName}</label>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.firstName}</label>
+                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.lastName}</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.lastName}</label>
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.phone}</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.phone}</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.email}</label>
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.email}</label>
+                <input type="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.flyPrivate}</label>
-              <select name="flyPrivate" value={formData.flyPrivate} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.flyPrivate}</label>
+              <select name="flyPrivate" value={formData.flyPrivate} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select...</option>
                 {t.flyPrivateOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.currentSolution}</label>
-              <input type="text" name="currentSolution" value={formData.currentSolution} onChange={handleInputChange} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.currentSolution}</label>
+              <input type="text" name="currentSolution" value={formData.currentSolution} onChange={handleInputChange} className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.hearAbout}</label>
-              <select name="hearAbout" value={formData.hearAbout} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.hearAbout}</label>
+              <select name="hearAbout" value={formData.hearAbout} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select...</option>
                 {t.hearAboutOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2" style={{ fontFamily: "Afacad, sans-serif" }}>{t.message}</label>
-              <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>{t.message}</label>
+              <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
             {/* Checkboxes */}
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-2 sm:gap-3">
               <input type="checkbox" id="marketingConsent" name="marketingConsent" checked={formData.marketingConsent} onChange={handleInputChange} className="mt-1 w-4 h-4 text-blue-600" />
-              <label htmlFor="marketingConsent" className="text-gray-700 text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.marketingText}</label>
+              <label htmlFor="marketingConsent" className="text-gray-700 text-xs sm:text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.marketingText}</label>
             </div>
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-2 sm:gap-3">
               <input type="checkbox" id="privacyConsent" name="privacyConsent" checked={formData.privacyConsent} onChange={handleInputChange} required className="mt-1 w-4 h-4 text-blue-600" />
-              <label htmlFor="privacyConsent" className="text-gray-700 text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.privacyText}<a href="#" className="text-blue-600 hover:underline">{t.privacyLink}</a>.</label>
+              <label htmlFor="privacyConsent" className="text-gray-700 text-xs sm:text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.privacyText}<a href="#" className="text-blue-600 hover:underline">{t.privacyLink}</a>.</label>
             </div>
 
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold" style={{ fontFamily: "Afacad, sans-serif" }}>
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition font-semibold text-sm sm:text-base" style={{ fontFamily: "Afacad, sans-serif" }}>
               {t.submit}
             </button>
           </form>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-blue-700 text-white mt-16 py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex justify-center gap-8 mb-8">
-            <span className="cursor-default">Fleet</span>
-            <button onClick={onBack} className="hover:underline">Membership</button>
-            <button onClick={onExperienceClick} className="hover:underline">Experience</button>
-            <a href="#" className="hover:underline">Contact Us</a>
+      {/* ========== RESPONSIVE FOOTER ========== */}
+      <footer className="bg-blue-700 text-white mt-12 sm:mt-16 py-6 sm:py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <span className="cursor-default text-sm sm:text-base">Fleet</span>
+            <button onClick={onBack} className="hover:underline text-sm sm:text-base">Membership</button>
+            <button onClick={onExperienceClick} className="hover:underline text-sm sm:text-base">Experience</button>
+            <a href="#" className="hover:underline text-sm sm:text-base">Contact Us</a>
           </div>
-          <div className="flex justify-center gap-50 mb-10">
-            <div className="text-center">
+          <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16 mb-8 sm:mb-10">
+            <div className="text-center sm:text-left space-y-1">
               <div>Gulfstream</div>
               <div>Dassault</div>
               <div>Cessna</div>
               <div>Bombardier</div>
               <div>Embraer</div>
             </div>
-            <div className="text-center">
+            <div className="text-center sm:text-right space-y-1">
               <div>+645737383466</div>
               <div>+987654345679</div>
               <div>&nbsp;</div>
@@ -512,7 +538,7 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
               <div>&nbsp;</div>
             </div>
           </div>
-          <div className="text-center text-sm mt-8 pt-4 border-t border-blue-500">
+          <div className="text-center text-xs sm:text-sm mt-6 sm:mt-8 pt-4 border-t border-blue-500">
             {t.copyright}
           </div>
         </div>
