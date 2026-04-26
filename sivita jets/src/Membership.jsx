@@ -302,7 +302,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
       {/* BIG IMAGE HERO (responsive) */}
       <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
         <img 
-          src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80" 
+          src="yuri.jpg" 
           alt="Membership Hero" 
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
