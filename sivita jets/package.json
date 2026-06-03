@@ -1,4 +1,5 @@
 {
+  "homepage":"https://sivita-jets.github.io/sivita-jets",
   "name": "sivita-jets",
   "private": true,
   "version": "0.0.0",
@@ -25,4 +26,7 @@
     "globals": "^17.4.0",
     "vite": "^8.0.4"
   }
+  
 }
+
+
