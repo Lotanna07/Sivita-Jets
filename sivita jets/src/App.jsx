@@ -3,10 +3,10 @@ import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
 import Fleet from './Fleet';
 import Experience from './Experience';
-import Chatbot from './Chatbot';        // NEW: chatbot component
-import axios from 'axios';              // NEW: for API calls
+import Chatbot from './Chatbot';
+import axios from 'axios';
 
-// ---------- TRANSLATIONS (fully preserved) ----------
+// ---------- TRANSLATIONS (fully preserved from your original) ----------
 const translations = {
   en: {
     navMembership: 'Membership',
@@ -258,8 +258,8 @@ function App() {
   const [showExperience, setShowExperience] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
 
-  // ========== NEW: AUTH STATE & API ==========
-  const [authMode, setAuthMode] = useState(null); // 'login' or 'signup'
+  // ========== AUTH STATE & API ==========
+  const [authMode, setAuthMode] = useState(null);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [userToken, setUserToken] = useState(localStorage.getItem('token') || null);
@@ -467,7 +467,7 @@ function App() {
               )}
             </div>
 
-            {/* NEW: Dynamic login/signup buttons */}
+            {/* STATIC buttons – "Sign In" changed to "Log in" */}
             {!userToken ? (
               <>
                 <button
@@ -528,7 +528,7 @@ function App() {
                 </div>
               </div>
               <hr className="my-4" />
-              {/* NEW: Mobile menu auth buttons */}
+              {/* Mobile drawer buttons – changed "Sign In" to "Log in" */}
               <div className="space-y-3">
                 {!userToken ? (
                   <>
@@ -749,10 +749,10 @@ function App() {
         </div>
       </footer>
 
-      {/* NEW: Chatbot component */}
+      {/* Chatbot component */}
       <Chatbot />
 
-      {/* NEW: Login/Signup Modal */}
+      {/* Login/Signup Modal */}
       {authMode && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96">

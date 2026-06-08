@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Chatbot from './Chatbot'; // ADDED: chatbot import
+import Chatbot from './Chatbot';
 
 const membershipTranslations = {
   en: { 
@@ -254,7 +254,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
                 </div>
               )}
             </div>
-            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
             <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
           </div>
         </div>
@@ -288,7 +288,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
               </div>
               <hr className="my-4" />
               <div className="space-y-3">
-                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
                 <button className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
               </div>
             </div>
@@ -456,9 +456,7 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       </footer>
 
-      {/* Chatbot appears on membership page */}
       <Chatbot />
-
     </div>
   );
 }

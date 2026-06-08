@@ -260,7 +260,8 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
                 </div>
               )}
             </div>
-            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+            {/* CHANGED: "Sign In" to "Log in" */}
+            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
             <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
           </div>
         </div>
@@ -294,8 +295,9 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
                 </div>
               </div>
               <hr className="my-4" />
+              {/* CHANGED: "Sign In" to "Log in" in mobile drawer */}
               <div className="space-y-3">
-                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign In</button>
+                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
                 <button className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
               </div>
             </div>
@@ -489,9 +491,8 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       </footer>
 
-      {/* ADDED: Chatbot component – appears on this page */}
+      {/* Chatbot component – appears on this page */}
       <Chatbot />
-
     </div>
   );
 }
