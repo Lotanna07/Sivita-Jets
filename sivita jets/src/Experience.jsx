@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chatbot from './Chatbot'; // ADDED: chatbot import
 
 const experienceTranslations = {
   en: {
@@ -194,10 +195,9 @@ const languageOptions = [
 
 function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMembershipClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const t = experienceTranslations[language] || experienceTranslations.en;
 
-  // Click outside handler for language menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (langMenuOpen && !event.target.closest('.language-dropdown')) {
@@ -234,7 +234,6 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
             <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Language dropdown – now clickable instead of hover */}
             <div className="relative language-dropdown">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -304,7 +303,7 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       )}
 
-      {/* ========== BIG IMAGE HERO (first) – responsive ========== */}
+      {/* ========== BIG IMAGE HERO (first) ========== */}
       <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
         <img
           src="richard.jpg"
@@ -326,7 +325,7 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
         </div>
       </div>
 
-      {/* ========== MAIN CONTENT (responsive) ========== */}
+      {/* ========== MAIN CONTENT ========== */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.mainHeading}
@@ -489,6 +488,10 @@ function Experience({ onBack, language = 'en', setLanguage, onFleetClick, onMemb
           </div>
         </div>
       </footer>
+
+      {/* ADDED: Chatbot component – appears on this page */}
+      <Chatbot />
+
     </div>
   );
 }

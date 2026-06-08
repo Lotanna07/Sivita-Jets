@@ -3,8 +3,10 @@ import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
 import Fleet from './Fleet';
 import Experience from './Experience';
+import Chatbot from './Chatbot';        // NEW: chatbot component
+import axios from 'axios';              // NEW: for API calls
 
-// ---------- TRANSLATIONS (fully preserved from your original) ----------
+// ---------- TRANSLATIONS (fully preserved) ----------
 const translations = {
   en: {
     navMembership: 'Membership',
@@ -254,7 +256,49 @@ function App() {
   const [showMembership, setShowMembership] = useState(false);
   const [showFleet, setShowFleet] = useState(false);
   const [showExperience, setShowExperience] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+
+  // ========== NEW: AUTH STATE & API ==========
+  const [authMode, setAuthMode] = useState(null); // 'login' or 'signup'
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [userToken, setUserToken] = useState(localStorage.getItem('token') || null);
+  const API_URL = 'http://localhost:5000/api';
+
+  const handleSignUp = async () => {
+    try {
+      const res = await axios.post(`${API_URL}/signup`, {
+        email: authEmail,
+        password: authPassword,
+      });
+      localStorage.setItem('token', res.data.token);
+      setUserToken(res.data.token);
+      alert('Signup successful!');
+      setAuthMode(null);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Signup failed');
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(`${API_URL}/login`, {
+        email: authEmail,
+        password: authPassword,
+      });
+      localStorage.setItem('token', res.data.token);
+      setUserToken(res.data.token);
+      alert('Login successful!');
+      setAuthMode(null);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Login failed');
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUserToken(null);
+  };
 
   // Helper to save current page to localStorage
   const saveCurrentPage = (page) => {
@@ -392,7 +436,7 @@ function App() {
             <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Language dropdown – now clickable instead of hover */}
+            {/* Language dropdown */}
             <div className="relative language-dropdown">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -422,8 +466,37 @@ function App() {
                 </div>
               )}
             </div>
-            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
-            <button className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
+
+            {/* NEW: Dynamic login/signup buttons */}
+            {!userToken ? (
+              <>
+                <button
+                  onClick={() => setAuthMode('login')}
+                  className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition"
+                  style={{ fontFamily: "Afacad, sans-serif" }}
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => setAuthMode('signup')}
+                  className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                  style={{ fontFamily: "Afacad, sans-serif" }}
+                >
+                  Sign Up
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-700" style={{ fontFamily: "Afacad, sans-serif" }}>Welcome!</span>
+                <button
+                  onClick={handleLogout}
+                  className="px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md border border-red-500 text-red-500 hover:bg-red-50"
+                  style={{ fontFamily: "Afacad, sans-serif" }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -455,9 +528,37 @@ function App() {
                 </div>
               </div>
               <hr className="my-4" />
+              {/* NEW: Mobile menu auth buttons */}
               <div className="space-y-3">
-                <button className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Log in</button>
-                <button className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" style={{ fontFamily: "Afacad, sans-serif" }}>Sign Up</button>
+                {!userToken ? (
+                  <>
+                    <button
+                      onClick={() => { setAuthMode('login'); setMenuOpen(false); }}
+                      className="w-full px-4 py-2 rounded-md border border-blue-600 text-blue-600 bg-white hover:bg-blue-50 transition"
+                      style={{ fontFamily: "Afacad, sans-serif" }}
+                    >
+                      Log in
+                    </button>
+                    <button
+                      onClick={() => { setAuthMode('signup'); setMenuOpen(false); }}
+                      className="w-full px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                      style={{ fontFamily: "Afacad, sans-serif" }}
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span className="block text-center text-sm text-gray-700" style={{ fontFamily: "Afacad, sans-serif" }}>Welcome!</span>
+                    <button
+                      onClick={() => { handleLogout(); setMenuOpen(false); }}
+                      className="w-full px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-50"
+                      style={{ fontFamily: "Afacad, sans-serif" }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -647,6 +748,41 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* NEW: Chatbot component */}
+      <Chatbot />
+
+      {/* NEW: Login/Signup Modal */}
+      {authMode && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96">
+            <h2 className="text-2xl font-bold mb-4">{authMode === 'login' ? 'Log In' : 'Sign Up'}</h2>
+            <input
+              type="email"
+              placeholder="Email"
+              value={authEmail}
+              onChange={(e) => setAuthEmail(e.target.value)}
+              className="w-full border rounded px-3 py-2 mb-3"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={authPassword}
+              onChange={(e) => setAuthPassword(e.target.value)}
+              className="w-full border rounded px-3 py-2 mb-4"
+            />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setAuthMode(null)} className="px-4 py-2 text-gray-600">Cancel</button>
+              <button
+                onClick={authMode === 'login' ? handleLogin : handleSignUp}
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+              >
+                {authMode === 'login' ? 'Log In' : 'Create Account'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

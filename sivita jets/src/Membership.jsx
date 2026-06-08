@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chatbot from './Chatbot'; // ADDED: chatbot import
 
 const membershipTranslations = {
   en: { 
@@ -158,7 +159,7 @@ const languageOptions = [
 
 function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExperienceClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -173,7 +174,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
   });
   const t = membershipTranslations[language] || membershipTranslations.en;
 
-  // Click outside handler for language menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (langMenuOpen && !event.target.closest('.language-dropdown')) {
@@ -210,7 +210,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar – responsive */}
       <nav className="sticky top-0 z-50 bg-white shadow-md py-3 sm:py-4 px-4 sm:px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4 sm:gap-6">
@@ -229,7 +228,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
             <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Language dropdown – now clickable instead of hover */}
             <div className="relative language-dropdown">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -262,7 +260,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       </nav>
 
-      {/* Mobile Drawer – unchanged but kept responsive */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMenuOpen(false)}></div>
@@ -299,7 +296,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       )}
 
-      {/* BIG IMAGE HERO (responsive) */}
       <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
         <img 
           src="yuri.jpg" 
@@ -316,7 +312,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       </div>
 
-      {/* OUR MEMBERSHIP heading + paragraph (responsive) */}
       <div className="max-w-6xl mx-auto mt-12 sm:mt-20 px-4 sm:px-6">
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-center mb-4 sm:mb-6" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.membershipHeading}
@@ -326,7 +321,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </p>
       </div>
 
-      {/* Discuss your membership + Logo + Paragraph (responsive) */}
       <div className="max-w-6xl mx-auto mt-12 sm:mt-20 px-4 sm:px-6 text-center">
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.discussHeading}
@@ -341,7 +335,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </p>
       </div>
 
-      {/* Contact Form (responsive) */}
       <div className="max-w-4xl mx-auto mt-12 sm:mt-20 px-4 pb-20">
         <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
@@ -391,7 +384,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
               <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
-            {/* Checkboxes (unchanged) */}
             <div className="flex items-start gap-2 sm:gap-3">
               <input type="checkbox" id="marketingConsent" name="marketingConsent" checked={formData.marketingConsent} onChange={handleInputChange} className="mt-1 w-4 h-4 text-blue-600" />
               <label htmlFor="marketingConsent" className="text-gray-700 text-xs sm:text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>I would like to receive marketing communications from SivitaJet by email, post or text message.</label>
@@ -408,7 +400,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       </div>
 
-      {/* Second Big Image with overlay – Discover fleet button (responsive) */}
       <div className="relative h-[60vh] sm:min-h-[70vh] w-full overflow-hidden">
         <img 
           src="ramon.jpg" 
@@ -435,7 +426,6 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
         </div>
       </div>
 
-      {/* Footer (responsive) */}
       <footer className="bg-blue-700 text-white mt-12 sm:mt-16 py-6 sm:py-8" style={{ fontFamily: "Afacad, sans-serif" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8 mb-6 sm:mb-8">
@@ -465,6 +455,10 @@ function Membership({ onBack, language = 'en', setLanguage, onFleetClick, onExpe
           </div>
         </div>
       </footer>
+
+      {/* Chatbot appears on membership page */}
+      <Chatbot />
+
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chatbot from './Chatbot'; // ADDED: chatbot import
 
 const fleetTranslations = {
   en: {
@@ -194,7 +195,7 @@ const languageOptions = [
 
 function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false); // NEW: language dropdown state
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -210,7 +211,6 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
 
   const t = fleetTranslations[language] || fleetTranslations.en;
 
-  // Click outside handler for language menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (langMenuOpen && !event.target.closest('.language-dropdown')) {
@@ -266,7 +266,6 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
             <img src="logo.png" alt="Airline Logo" className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto" />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Language dropdown – now clickable instead of hover */}
             <div className="relative language-dropdown">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -336,7 +335,7 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
         </div>
       )}
 
-      {/* ========== HERO HEADING (responsive) ========== */}
+      {/* ========== HERO HEADING ========== */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold" style={{ fontFamily: "Apple Garamond, serif" }}>
           {t.heroTitle}
@@ -446,7 +445,7 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
         <img src="logo.png" alt="Logo" className="mx-auto w-32 sm:w-48 md:w-64 h-auto" />
       </div>
 
-      {/* ========== CONTACT FORM (responsive) ========== */}
+      {/* ========== CONTACT FORM ========== */}
       <div className="max-w-4xl mx-auto mt-12 sm:mt-20 px-4 pb-20">
         <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-8" style={{ fontFamily: "Apple Garamond, serif" }}>
@@ -496,7 +495,6 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
               <textarea name="message" value={formData.message} onChange={handleInputChange} rows={4} className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
-            {/* Checkboxes */}
             <div className="flex items-start gap-2 sm:gap-3">
               <input type="checkbox" id="marketingConsent" name="marketingConsent" checked={formData.marketingConsent} onChange={handleInputChange} className="mt-1 w-4 h-4 text-blue-600" />
               <label htmlFor="marketingConsent" className="text-gray-700 text-xs sm:text-sm" style={{ fontFamily: "Afacad, sans-serif" }}>{t.marketingText}</label>
@@ -543,6 +541,10 @@ function Fleet({ onBack, language = 'en', setLanguage, onExperienceClick }) {
           </div>
         </div>
       </footer>
+
+      {/* Chatbot appears on fleet page */}
+      <Chatbot />
+
     </div>
   );
 }
