@@ -1,5 +1,5 @@
 // src/Chatbot.jsx
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { FaTimes, FaPaperPlane } from 'react-icons/fa';
 
 const Chatbot = () => {

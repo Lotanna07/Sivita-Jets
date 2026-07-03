@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { RiFlightTakeoffLine, RiFlightLandLine } from 'react-icons/ri';
 import Membership from './Membership';
@@ -6,6 +6,7 @@ import Fleet from './Fleet';
 import Experience from './Experience';
 import Chatbot from './Chatbot';
 import Auth from './Auth';
+
 
 // ---------- TRANSLATIONS (fully preserved) ----------
 const translations = {
